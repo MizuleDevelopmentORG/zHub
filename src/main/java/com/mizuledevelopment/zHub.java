@@ -8,17 +8,15 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
-public final class ZHub extends JavaPlugin {
+public final class zHub extends JavaPlugin {
 
     private Config tabConfig;
     private Config settingsConfig;
     private static Chat chat = null;
-
 
     @Override
     public void onEnable() {

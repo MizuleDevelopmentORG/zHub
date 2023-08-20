@@ -1,17 +1,17 @@
 package com.mizuledevelopment.tab;
 
-import com.mizuledevelopment.ZHub;
+import com.mizuledevelopment.zHub;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Tab {
 
-    private final ZHub plugin;
+    private final zHub plugin;
     private final List<String> header;
     private final List<String> footer;
 
-    public Tab(ZHub plugin) {
+    public Tab(zHub plugin) {
         this.plugin = plugin;
         this.header = new ArrayList<>(this.plugin.getTab().getStringList("tab.header"));
         this.footer = new ArrayList<>(this.plugin.getTab().getStringList("tab.footer"));
