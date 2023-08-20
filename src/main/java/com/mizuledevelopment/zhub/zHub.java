@@ -5,6 +5,7 @@ import com.mizuledevelopment.zhub.listener.player.PlayerListener;
 import com.mizuledevelopment.zhub.listener.server.ServerListener;
 import com.mizuledevelopment.zhub.pvp.PvPManager;
 import com.mizuledevelopment.zhub.scoreboard.ScoreboardHandler;
+import com.mizuledevelopment.zhub.scoreboard.ScoreboardListener;
 import com.mizuledevelopment.zhub.tab.TabHandler;
 import com.mizuledevelopment.zhub.util.LicenseChecker;
 import com.mizuledevelopment.zhub.util.color.Color;
@@ -19,7 +20,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.Arrays;
 
-@SuppressWarnings("ALL")
 public final class zHub extends JavaPlugin {
 
     private static zHub instance;
@@ -29,21 +29,25 @@ public final class zHub extends JavaPlugin {
     private Config configConfiguration;
     private Config messagesConfig;
 
-    private PvPManager pvPManager;
+    private PvPManager pvpManager;
     private TabHandler tabHandler;
 
     @Override
     public void onEnable() {
         instance = this;
         final long time = System.currentTimeMillis();
-        new LicenseChecker();
+        saveDefaultConfig();
+        if (!new LicenseChecker(getDescription().getName()).check()) {
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
 
         this.configuration();
         this.command();
         this.tabHandler = new TabHandler(this);
         new ScoreboardHandler();
         this.listener(Bukkit.getPluginManager());
-        this.pvPManager = new PvPManager();
+        this.pvpManager = new PvPManager();
 
         Bukkit.getConsoleSender().sendMessage(Color.translate("&8[&bzHub&8] &7Successfully enabled. It took me &b" + (System.currentTimeMillis() - time) + " &7ms"));
     }
@@ -65,7 +69,8 @@ public final class zHub extends JavaPlugin {
     private void listener(final @NotNull PluginManager pluginManager) {
         Arrays.asList(
                 new ServerListener(this),
-                new PlayerListener(this)
+                new PlayerListener(this),
+                new ScoreboardListener()
         ).forEach(listener -> pluginManager.registerEvents(listener, this));
     }
 
