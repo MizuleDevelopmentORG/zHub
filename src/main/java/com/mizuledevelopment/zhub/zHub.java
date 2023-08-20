@@ -1,5 +1,8 @@
 package com.mizuledevelopment.zhub;
 
+import com.mizuledevelopment.zhub.scoreboard.ScoreboardHandler;
+import com.mizuledevelopment.zhub.tab.TabHandler;
+import com.mizuledevelopment.zhub.util.LicenseChecker;
 import com.mizuledevelopment.zhub.util.color.Color;
 import com.mizuledevelopment.zhub.util.config.Config;
 import org.bukkit.Bukkit;
@@ -12,15 +15,22 @@ import java.io.File;
 
 public final class zHub extends JavaPlugin {
 
+    private static zHub instance;
     private Config tabConfig;
     private Config settingsConfig;
+    private TabHandler tabHandler;
+    private ScoreboardHandler scoreboardHandler;
 
     @Override
     public void onEnable() {
+        instance = this;
         final long time = System.currentTimeMillis();
+        new LicenseChecker();
 
         this.configuration();
         this.command();
+        this.tabHandler = new TabHandler(this);
+        this.scoreboardHandler = new ScoreboardHandler(this);
         this.listener(Bukkit.getPluginManager());
 
         Bukkit.getConsoleSender().sendMessage(Color.translate("&8[&bzHub&8] &7Successfully enabled. It took me &b" + (System.currentTimeMillis() - time) + " &7ms"));
@@ -48,5 +58,21 @@ public final class zHub extends JavaPlugin {
 
     public YamlConfiguration getTab() {
         return this.tabConfig.getConfiguration();
+    }
+
+    public static zHub instance() {
+        return instance;
+    }
+
+    public Config tabConfig() {
+        return this.tabConfig;
+    }
+
+    public Config settingsConfig() {
+        return this.settingsConfig;
+    }
+
+    public TabHandler tabHandler() {
+        return this.tabHandler;
     }
 }

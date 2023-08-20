@@ -1,20 +1,23 @@
 package com.mizuledevelopment.zhub.tab;
 
+import com.mizuledevelopment.zhub.tab.listener.TabListener;
 import com.mizuledevelopment.zhub.zHub;
+import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tab {
+public class TabHandler {
 
     private final zHub plugin;
     private final List<String> header;
     private final List<String> footer;
 
-    public Tab(final zHub plugin) {
+    public TabHandler(final zHub plugin) {
         this.plugin = plugin;
         this.header = new ArrayList<>(this.plugin.getTab().getStringList("tab.header"));
         this.footer = new ArrayList<>(this.plugin.getTab().getStringList("tab.footer"));
+        Bukkit.getPluginManager().registerEvents(new TabListener(this), this.plugin);
     }
 
     public String header() {
