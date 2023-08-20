@@ -1,0 +1,4 @@
+name: zHub
+version: '${project.version}'
+main: com.mizuledevelopment.ZHub
+api-version: '1.17'

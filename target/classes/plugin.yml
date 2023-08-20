@@ -1,0 +1,4 @@
+name: zHub
+version: '1.0-SNAPSHOT'
+main: com.mizuledevelopment.ZHub
+api-version: '1.17'
