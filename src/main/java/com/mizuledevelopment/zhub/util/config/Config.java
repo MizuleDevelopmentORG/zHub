@@ -7,6 +7,7 @@ import org.bukkit.plugin.Plugin;
 import java.io.File;
 import java.io.IOException;
 
+@Deprecated(forRemoval = true)
 public class Config {
 
     private final Plugin plugin;
@@ -14,48 +15,48 @@ public class Config {
     private final YamlConfiguration configuration;
     private final String directory;
 
-    public Config(Plugin plugin, File file, YamlConfiguration configuration, String directory) {
+    public Config(final Plugin plugin, final File file, final YamlConfiguration configuration, final String directory) {
         this.plugin = plugin;
         this.file = file;
         this.configuration = configuration;
         this.directory = directory;
     }
 
-    public void create(){
+    public void create() {
         if (!(this.file.exists())) {
             this.file.getParentFile().mkdir();
-            plugin.saveResource(this.directory, false);
+            this.plugin.saveResource(this.directory, false);
         }
         try {
-            configuration.load(file);
-        } catch (IOException | InvalidConfigurationException e) {
+            this.configuration.load(this.file);
+        } catch (final IOException | InvalidConfigurationException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void save(){
+    public void save() {
         try {
             this.configuration.save(this.file);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException(e);
         }
 
         try {
             this.configuration.load(this.file);
-        } catch (IOException | InvalidConfigurationException e) {
+        } catch (final IOException | InvalidConfigurationException e) {
             throw new RuntimeException(e);
         }
     }
 
     public YamlConfiguration getConfiguration() {
-        return configuration;
+        return this.configuration;
     }
 
     public File getFile() {
-        return file;
+        return this.file;
     }
 
     public String getDirectory() {
-        return directory;
+        return this.directory;
     }
 }

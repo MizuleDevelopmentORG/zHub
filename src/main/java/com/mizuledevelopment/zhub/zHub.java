@@ -17,7 +17,7 @@ public final class zHub extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        long time = System.currentTimeMillis();
+        final long time = System.currentTimeMillis();
 
         this.configuration();
         this.command();
@@ -26,27 +26,27 @@ public final class zHub extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(Color.translate("&8[&bzHub&8] &7Successfully enabled. It took me &b" + (System.currentTimeMillis() - time) + " &7ms"));
     }
 
-    private void configuration(){
-        settingsConfig = new Config(this, new File(getDataFolder(), "settings.yml"), new YamlConfiguration(), "settings.yml");
-        settingsConfig.create();
+    private void configuration() {
+        this.settingsConfig = new Config(this, new File(getDataFolder(), "settings.yml"), new YamlConfiguration(), "settings.yml");
+        this.settingsConfig.create();
 
-        tabConfig = new Config(this, new File(getDataFolder(), "tab.yml"), new YamlConfiguration(), "tab.yml");
-        tabConfig.create();
+        this.tabConfig = new Config(this, new File(getDataFolder(), "tab.yml"), new YamlConfiguration(), "tab.yml");
+        this.tabConfig.create();
     }
 
-    private void listener(@NotNull PluginManager pluginManager){
-
-    }
-
-    private void command(){
+    private void listener(final @NotNull PluginManager pluginManager) {
 
     }
 
-    public YamlConfiguration getSettings(){
+    private void command() {
+
+    }
+
+    public YamlConfiguration getSettings() {
         return this.settingsConfig.getConfiguration();
     }
 
-    public YamlConfiguration getTab(){
+    public YamlConfiguration getTab() {
         return this.tabConfig.getConfiguration();
     }
 }

@@ -8,51 +8,54 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated(forRemoval = true)
 public class ItemBuilder {
 
     private final ItemStack itemStack;
 
-    public ItemBuilder(ItemStack itemStack) {
+    public ItemBuilder(final ItemStack itemStack) {
         this.itemStack = itemStack;
     }
 
-    public void setName(String name) {
-        ItemMeta meta = itemStack.getItemMeta();
+    public void setName(final String name) {
+        final ItemMeta meta = this.itemStack.getItemMeta();
         meta.setDisplayName(name);
-        itemStack.setItemMeta(meta);
+        this.itemStack.setItemMeta(meta);
     }
 
-    public void addLoreLine(String loreLine) {
-        ItemMeta meta = itemStack.getItemMeta();
+    public void addLoreLine(final String loreLine) {
+        final ItemMeta meta = this.itemStack.getItemMeta();
         meta.getLore().add(loreLine);
-        itemStack.setItemMeta(meta);
+        this.itemStack.setItemMeta(meta);
     }
 
-    public void setLore(List<String> lore) {
-        ItemMeta meta = itemStack.getItemMeta();
+    public void setLore(final List<String> lore) {
+        final ItemMeta meta = this.itemStack.getItemMeta();
         meta.setLore(lore);
-        itemStack.setItemMeta(meta);
+        this.itemStack.setItemMeta(meta);
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(final int amount) {
         this.itemStack.setAmount(amount);
     }
 
-    public void addEnchantment(Enchantment enchantment, int power) {
+    public void addEnchantment(final Enchantment enchantment, final int power) {
         this.itemStack.addUnsafeEnchantment(enchantment, power);
     }
 
-    public void setEnchantments(Map<Enchantment, Integer> enchantments) {
+    public void setEnchantments(final Map<Enchantment, Integer> enchantments) {
         enchantments.forEach(this.itemStack::addUnsafeEnchantment);
     }
 
-    public void addFlag(ItemFlag itemFlag) {
+    public void addFlag(final ItemFlag itemFlag) {
         this.itemStack.addItemFlags(itemFlag);
     }
 
-    public void setFlags(List<ItemFlag> itemFlags) {
+    public void setFlags(final List<ItemFlag> itemFlags) {
         itemFlags.forEach(this.itemStack::addItemFlags);
     }
 
-    public ItemStack build(){ return this.itemStack; }
+    public ItemStack build() {
+        return this.itemStack;
+    }
 }

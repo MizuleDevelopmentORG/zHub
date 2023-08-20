@@ -12,23 +12,23 @@ public class CommandManager {
     private final PluginCommand pluginCommand;
     private final List<Command> commands = new ArrayList<>();
 
-    public CommandManager(PluginCommand pluginCommand) {
+    public CommandManager(final PluginCommand pluginCommand) {
         this.pluginCommand = pluginCommand;
     }
 
-    public void addSubCommand(Command command){
-        commands.add(command);
+    public void addSubCommand(final Command command) {
+        this.commands.add(command);
     }
 
-    public void setCommand(List<Command> commandList) {
-        commands.addAll(commandList);
+    public void setCommand(final List<Command> commandList) {
+        this.commands.addAll(commandList);
     }
 
     public void registerCommands() {
-        pluginCommand.setExecutor(new CommandAdapter(commands));
+        this.pluginCommand.setExecutor(new CommandAdapter(this.commands));
     }
 
     public List<Command> getRegisteredSubCommands() {
-        return commands;
+        return this.commands;
     }
 }
