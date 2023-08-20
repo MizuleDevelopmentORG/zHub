@@ -7,7 +7,7 @@ import org.bukkit.plugin.Plugin;
 import java.io.File;
 import java.io.IOException;
 
-@Deprecated(forRemoval = true)
+@Deprecated
 public class Config {
 
     private final Plugin plugin;

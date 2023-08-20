@@ -20,9 +20,6 @@ public final class ScoreboardHandler {
     private static TitleGetter titleGetter = new DefaultTitleGetter();
     private static ScoreGetter scoreGetter = new DefaultScoreGetter();
 
-    public ScoreboardHandler(final zHub zHub) {
-    }
-
     public static void configure(final TitleGetter titleGetter, final ScoreGetter scoreGetter) {
         ScoreboardHandler.titleGetter = titleGetter;
         ScoreboardHandler.scoreGetter = scoreGetter;

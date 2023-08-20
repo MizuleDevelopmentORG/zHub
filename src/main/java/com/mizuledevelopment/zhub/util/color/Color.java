@@ -5,7 +5,7 @@ import org.bukkit.ChatColor;
 import java.util.ArrayList;
 import java.util.List;
 
-@Deprecated(forRemoval = true)
+@Deprecated
 public class Color {
 
     public static String translate(final String s) {
