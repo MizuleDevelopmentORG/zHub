@@ -1,1 +1,10 @@
-C:\Users\kacpe\IdeaProjects\MizuleHub\src\main\java\com\mizuledevelopment\ZHub.java
+/home/cas/dev/Mizule/zHub/src/main/java/com/mizuledevelopment/util/command/Command.java
+/home/cas/dev/Mizule/zHub/src/main/java/com/mizuledevelopment/util/color/Color.java
+/home/cas/dev/Mizule/zHub/src/main/java/com/mizuledevelopment/util/item/ItemBuilder.java
+/home/cas/dev/Mizule/zHub/src/main/java/com/mizuledevelopment/tab/listener/TabListener.java
+/home/cas/dev/Mizule/zHub/src/main/java/com/mizuledevelopment/util/PlaceholderUtil.java
+/home/cas/dev/Mizule/zHub/src/main/java/com/mizuledevelopment/util/config/Config.java
+/home/cas/dev/Mizule/zHub/src/main/java/com/mizuledevelopment/zHub.java
+/home/cas/dev/Mizule/zHub/src/main/java/com/mizuledevelopment/util/command/manager/CommandManager.java
+/home/cas/dev/Mizule/zHub/src/main/java/com/mizuledevelopment/tab/Tab.java
+/home/cas/dev/Mizule/zHub/src/main/java/com/mizuledevelopment/util/command/adapter/CommandAdapter.java

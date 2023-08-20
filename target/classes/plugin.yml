@@ -1,4 +1,6 @@
 name: zHub
 version: '1.0-SNAPSHOT'
-main: com.mizuledevelopment.ZHub
+main: com.mizuledevelopment.zHub
 api-version: '1.17'
+softdepend:
+  - PlaceholderAPI

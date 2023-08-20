@@ -2,3 +2,5 @@ name: zHub
 version: '${project.version}'
 main: com.mizuledevelopment.zHub
 api-version: '1.17'
+softdepend:
+  - PlaceholderAPI

@@ -1,1 +1,10 @@
-com\mizuledevelopment\ZHub.class
+com/mizuledevelopment/util/config/Config.class
+com/mizuledevelopment/util/item/ItemBuilder.class
+com/mizuledevelopment/util/color/Color.class
+com/mizuledevelopment/zHub.class
+com/mizuledevelopment/util/command/adapter/CommandAdapter.class
+com/mizuledevelopment/util/PlaceholderUtil.class
+com/mizuledevelopment/util/command/manager/CommandManager.class
+com/mizuledevelopment/tab/Tab.class
+com/mizuledevelopment/tab/listener/TabListener.class
+com/mizuledevelopment/util/command/Command.class
