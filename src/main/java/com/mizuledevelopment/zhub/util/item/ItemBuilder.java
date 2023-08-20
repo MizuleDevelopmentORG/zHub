@@ -1,4 +1,4 @@
-package com.mizuledevelopment.util.item;
+package com.mizuledevelopment.zhub.util.item;
 
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -7,7 +7,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class ItemBuilder {
 

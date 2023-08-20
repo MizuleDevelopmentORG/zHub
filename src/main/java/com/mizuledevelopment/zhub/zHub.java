@@ -1,11 +1,10 @@
-package com.mizuledevelopment;
+package com.mizuledevelopment.zhub;
 
-import com.mizuledevelopment.util.color.Color;
-import com.mizuledevelopment.util.config.Config;
+import com.mizuledevelopment.zhub.util.color.Color;
+import com.mizuledevelopment.zhub.util.config.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,7 +1,7 @@
-package com.mizuledevelopment.tab.listener;
+package com.mizuledevelopment.zhub.tab.listener;
 
-import com.mizuledevelopment.zHub;
-import com.mizuledevelopment.tab.Tab;
+import com.mizuledevelopment.zhub.zHub;
+import com.mizuledevelopment.zhub.tab.Tab;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;

@@ -1,7 +1,7 @@
-package com.mizuledevelopment.util.command.manager;
+package com.mizuledevelopment.zhub.util.command.manager;
 
-import com.mizuledevelopment.util.command.Command;
-import com.mizuledevelopment.util.command.adapter.CommandAdapter;
+import com.mizuledevelopment.zhub.util.command.Command;
+import com.mizuledevelopment.zhub.util.command.adapter.CommandAdapter;
 import org.bukkit.command.PluginCommand;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.mizuledevelopment.util.config;
+package com.mizuledevelopment.zhub.util.config;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;

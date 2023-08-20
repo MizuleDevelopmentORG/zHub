@@ -1,4 +1,4 @@
-package com.mizuledevelopment.util.color;
+package com.mizuledevelopment.zhub.util.color;
 
 import org.bukkit.ChatColor;
 

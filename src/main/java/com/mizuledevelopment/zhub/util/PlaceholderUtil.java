@@ -1,4 +1,4 @@
-package com.mizuledevelopment.util;
+package com.mizuledevelopment.zhub.util;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;

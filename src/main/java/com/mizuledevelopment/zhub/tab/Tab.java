@@ -1,6 +1,6 @@
-package com.mizuledevelopment.tab;
+package com.mizuledevelopment.zhub.tab;
 
-import com.mizuledevelopment.zHub;
+import com.mizuledevelopment.zhub.zHub;
 
 import java.util.ArrayList;
 import java.util.List;

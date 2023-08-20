@@ -1,4 +1,4 @@
-package com.mizuledevelopment.util.command;
+package com.mizuledevelopment.zhub.util.command;
 
 import org.bukkit.command.CommandSender;
 

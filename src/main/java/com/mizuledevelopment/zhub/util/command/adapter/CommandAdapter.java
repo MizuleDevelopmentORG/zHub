@@ -1,7 +1,7 @@
-package com.mizuledevelopment.util.command.adapter;
+package com.mizuledevelopment.zhub.util.command.adapter;
 
 
-import com.mizuledevelopment.util.command.Command;
+import com.mizuledevelopment.zhub.util.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
