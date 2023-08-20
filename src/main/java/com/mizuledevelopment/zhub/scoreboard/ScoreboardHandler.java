@@ -48,7 +48,7 @@ public final class ScoreboardHandler {
     }
 
     static class DefaultScoreGetter implements ScoreGetter {
-        public void getScores(final LinkedList<? super Component> scores, final Player player) {
+        public void getScores(final @NotNull LinkedList<? super Component> scores, final @NotNull Player player) {
             scores.add(Component.text("Hey there,", TextColor.color(0xB9B2FF))
                     .append(Component.space())
                     .append(player.displayName())
