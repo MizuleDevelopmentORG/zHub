@@ -2,6 +2,7 @@ package com.mizuledevelopment.zhub.tab;
 
 import com.mizuledevelopment.zhub.tab.listener.TabListener;
 import com.mizuledevelopment.zhub.zHub;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
@@ -20,19 +21,20 @@ public class TabHandler {
         Bukkit.getPluginManager().registerEvents(new TabListener(this), this.plugin);
     }
 
-    public String header() {
+    // TODO: I'll improve this later, I'm just lazy right now.
+    public Component header() {
         final StringBuilder s = new StringBuilder();
         for (final String string : this.header) {
             s.append(string);
         }
-        return s.toString();
+        return Component.text(s.toString());
     }
 
-    public String footer() {
+    public Component footer() {
         final StringBuilder s = new StringBuilder();
         for (final String string : this.footer) {
             s.append(string);
         }
-        return s.toString();
+        return Component.text(s.toString());
     }
 }

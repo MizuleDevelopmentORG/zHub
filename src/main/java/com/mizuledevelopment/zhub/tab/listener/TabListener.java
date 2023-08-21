@@ -16,7 +16,6 @@ public class TabListener implements Listener {
 
     @EventHandler
     public void onJoin(final PlayerJoinEvent event) {
-        event.getPlayer()
-                .setPlayerListHeaderFooter(this.tabHandler.header(), this.tabHandler.footer());
+        event.getPlayer().sendPlayerListHeaderAndFooter(this.tabHandler.header(), this.tabHandler.footer());
     }
 }
