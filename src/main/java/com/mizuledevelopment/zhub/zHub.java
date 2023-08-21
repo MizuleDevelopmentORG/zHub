@@ -4,6 +4,7 @@ import com.mizuledevelopment.zhub.command.SetSpawnCommand;
 import com.mizuledevelopment.zhub.listener.player.PlayerListener;
 import com.mizuledevelopment.zhub.listener.server.ServerListener;
 import com.mizuledevelopment.zhub.pvp.PvPManager;
+import com.mizuledevelopment.zhub.scoreboard.HubScoreboardAdapter;
 import com.mizuledevelopment.zhub.scoreboard.ScoreboardHandler;
 import com.mizuledevelopment.zhub.scoreboard.ScoreboardListener;
 import com.mizuledevelopment.zhub.tab.TabHandler;
@@ -48,6 +49,7 @@ public final class zHub extends JavaPlugin {
         new ScoreboardHandler();
         this.listener(Bukkit.getPluginManager());
         this.pvpManager = new PvPManager();
+        ScoreboardHandler.configure(new HubScoreboardAdapter());
 
         Bukkit.getConsoleSender().sendMessage(Color.translate("&8[&bzHub&8] &7Successfully enabled. It took me &b" + (System.currentTimeMillis() - time) + " &7ms"));
     }
