@@ -25,11 +25,21 @@ fun Project.channel(): String {
 
 fun Project.versionString(): String = this.version as String
 
-fun Project.nameString(): String = if (this.name.contains('-')) {
-    this.name.split("-").joinToString("-") { it.uppercaseFirstChar() }
-} else {
-    this.name.uppercaseFirstChar()
-}
+fun Project.nameString(useProjectName: Boolean = false): String =
+    if (useProjectName) {
+        val projName = providers.gradleProperty("projectName").getOrElse("template")
+        if (this.name.contains('-')) {
+            val splat = this.name.split("-").toMutableList()
+            splat[0] = projName
+            splat.joinToString("-") { it.uppercaseFirstChar() }
+        } else {
+            projName
+        }
+    } else if (this.name.contains('-')) {
+        this.name.split("-").joinToString("-") { it.uppercaseFirstChar() }
+    } else {
+        this.name.uppercaseFirstChar()
+    }
 
 fun Project.applyJarMetadata(moduleName: String) {
     if ("jar" in tasks.names) {

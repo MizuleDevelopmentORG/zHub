@@ -14,7 +14,7 @@ plugins {
 
 val libs = extensions.getByType(org.gradle.accessors.dm.LibrariesForLibs::class)
 
-extensions.getByType(BasePluginExtension::class.java).archivesName.set(project.nameString())
+extensions.getByType(BasePluginExtension::class.java).archivesName.set(project.nameString(true))
 
 indra {
     javaVersions {
