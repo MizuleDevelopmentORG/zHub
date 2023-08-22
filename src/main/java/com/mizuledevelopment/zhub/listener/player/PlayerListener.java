@@ -1,10 +1,8 @@
 package com.mizuledevelopment.zhub.listener.player;
 
-import com.destroystokyo.paper.event.player.PlayerInitialSpawnEvent;
 import com.mizuledevelopment.zhub.zHub;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
@@ -16,6 +14,7 @@ public class PlayerListener implements Listener {
 
     public PlayerListener(zHub plugin) {
         this.plugin = plugin;
+
     }
 
     @EventHandler

@@ -10,6 +10,7 @@ dependencies {
     compileOnly("broccolai.corn:corn-minecraft-paper:3.2.2") {
         exclude("io.papermc.paper", "paper-api")
     }
+    implementation("net.kyori:adventure-text-minimessage:4.14.0")
 }
 
 applyJarMetadata("com.mizuledevelopment.zhub")

@@ -24,7 +24,6 @@ import java.util.Arrays;
 public final class zHub extends JavaPlugin {
 
     private static zHub instance;
-
     private Config tabConfig;
     private Config settingsConfig;
     private Config configConfiguration;

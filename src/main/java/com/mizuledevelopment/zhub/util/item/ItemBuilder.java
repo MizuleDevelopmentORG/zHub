@@ -8,7 +8,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.List;
 import java.util.Map;
 
-@Deprecated(forRemoval = true)
+@Deprecated
 public class ItemBuilder {
 
     private final ItemStack itemStack;
