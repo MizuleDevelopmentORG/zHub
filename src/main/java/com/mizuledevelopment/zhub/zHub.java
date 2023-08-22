@@ -52,10 +52,10 @@ public final class zHub extends JavaPlugin {
         this.configuration();
         this.command();
         this.tabHandler = new TabHandler(this);
-        new ScoreboardHandler();
         this.listener(Bukkit.getPluginManager());
         this.pvpManager = new PvPManager();
         ScoreboardHandler.configure(new HubScoreboardAdapter(this));
+        new ScoreboardHandler();
 
         Bukkit.getConsoleSender().sendMessage(Color.translate("&8[&bzHub&8] &7Successfully enabled. It took me &b" + (System.currentTimeMillis() - time) + " &7ms"));
     }

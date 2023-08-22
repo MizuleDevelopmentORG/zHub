@@ -23,7 +23,7 @@ public class HubScoreboardAdapter implements ScoreboardAdapter {
 
     @Override
     public Component getTitle(final @NotNull Player player) {
-        final String title = this.config.getString("scoreboard.title", "<red>Title");
+        final String title = this.config.getString("title", "<red>Title");
         return TextUtil.parse(
                 title,
                 player,
@@ -33,7 +33,7 @@ public class HubScoreboardAdapter implements ScoreboardAdapter {
 
     @Override
     public void getLines(final @NotNull LinkedList<? super Component> lines, final @NotNull Player player) {
-        final List<String> configLines = this.config.getStringList("scoreboard.lines", new ArrayList<>());
+        final List<String> configLines = this.config.getStringList("lines", new ArrayList<>());
         for (final String line : configLines) {
             lines.add(TextUtil.parse(
                     line,
