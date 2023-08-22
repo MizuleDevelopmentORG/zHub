@@ -8,7 +8,7 @@ on:
 
 concurrency:
   group: "${{ github.workflow }}-${{ github.event.number || github.ref }}"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 permissions:
   actions: "write"
@@ -20,7 +20,7 @@ jobs:
     if: "${{ github.event_name != 'pull_request' || github.repository != github.event.pull_request.head.repo.full_name }}"
     strategy:
       matrix:
-        java: [ "19" ]
+        java: [ "20" ]
         os: [ "ubuntu-latest" ]
       fail-fast: true
     runs-on: "${{ matrix.os }}"

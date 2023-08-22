@@ -1,6 +1,6 @@
 [versions]
 annotations = "24.0.1"
-miniplaceholders = "2.2.0"
+miniplaceholders = "2.2.1"
 paper = "1.18.2-R0.1-SNAPSHOT"
 bstats = "3.0.2"
 kotlin = "1.9.0"
@@ -21,6 +21,7 @@ paper = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
 annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
 placeholderapi = { module = "me.clip:placeholderapi", version.ref = "placeholderapi" }
+miniplaceholders = { module = "io.github.miniplaceholders:miniplaceholders-api", version.ref = "miniplaceholders"}
 
 # configurate
 configurate-core = { module = "org.spongepowered:configurate-core", version.ref = "configurate" }

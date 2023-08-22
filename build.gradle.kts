@@ -7,6 +7,7 @@ dependencies {
     compileOnly(libs.annotations)
     api(libs.bstats.bukkit)
     compileOnly(libs.placeholderapi)
+    compileOnly(libs.miniplaceholders)
     compileOnly("broccolai.corn:corn-minecraft-paper:3.2.2") {
         exclude("io.papermc.paper", "paper-api")
     }
