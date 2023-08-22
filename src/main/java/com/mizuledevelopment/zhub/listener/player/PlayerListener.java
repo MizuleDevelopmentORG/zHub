@@ -1,6 +1,7 @@
 package com.mizuledevelopment.zhub.listener.player;
 
 import com.mizuledevelopment.zhub.zHub;
+import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -19,7 +20,10 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onJoin(PlayerSpawnLocationEvent event) {
-        event.setSpawnLocation(Objects.requireNonNull(this.plugin.getConfiguration().getLocation("spawn")));
+        final Location location = this.plugin.getConfiguration().getLocation("spawn");
+        if (location != null) {
+            event.setSpawnLocation(location);
+        }
     }
 
     @EventHandler

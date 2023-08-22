@@ -1,6 +1,7 @@
 package com.mizuledevelopment.zhub;
 
 import com.mizuledevelopment.zhub.command.SetSpawnCommand;
+import com.mizuledevelopment.zhub.config.impl.ConfigFile;
 import com.mizuledevelopment.zhub.listener.player.PlayerListener;
 import com.mizuledevelopment.zhub.listener.server.ServerListener;
 import com.mizuledevelopment.zhub.pvp.PvPManager;
@@ -19,7 +20,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public final class zHub extends JavaPlugin {
 
@@ -28,6 +33,8 @@ public final class zHub extends JavaPlugin {
     private Config settingsConfig;
     private Config configConfiguration;
     private Config messagesConfig;
+    private final Map<String, ConfigFile> configs = new HashMap<>();
+
 
     private PvPManager pvpManager;
     private TabHandler tabHandler;
@@ -37,10 +44,10 @@ public final class zHub extends JavaPlugin {
         instance = this;
         final long time = System.currentTimeMillis();
         saveDefaultConfig();
-        if (!new LicenseChecker(getDescription().getName()).check()) {
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
+//        if (!new LicenseChecker(getDescription().getName()).check()) {
+//            getServer().getPluginManager().disablePlugin(this);
+//            return;
+//        }
 
         this.configuration();
         this.command();
@@ -48,7 +55,7 @@ public final class zHub extends JavaPlugin {
         new ScoreboardHandler();
         this.listener(Bukkit.getPluginManager());
         this.pvpManager = new PvPManager();
-        ScoreboardHandler.configure(new HubScoreboardAdapter());
+        ScoreboardHandler.configure(new HubScoreboardAdapter(this));
 
         Bukkit.getConsoleSender().sendMessage(Color.translate("&8[&bzHub&8] &7Successfully enabled. It took me &b" + (System.currentTimeMillis() - time) + " &7ms"));
     }
@@ -114,5 +121,16 @@ public final class zHub extends JavaPlugin {
 
     public YamlConfiguration getMessages(){
         return messagesConfig.getConfiguration();
+    }
+
+    public ConfigFile config(final String name) {
+        return this.configs.computeIfAbsent(name, cfg -> {
+            if (!cfg.endsWith(".yml")) cfg = cfg + ".yml";
+            return new ConfigFile(cfg, getDataFolder().toPath(), zHub.class);
+        });
+    }
+
+    public List<ConfigFile> configs() {
+        return new ArrayList<>(this.configs.values());
     }
 }

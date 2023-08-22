@@ -14,6 +14,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class ScoreboardHandler {
 
+    public ScoreboardHandler() {
+        new ScoreboardThread().start();
+    }
+
     public static final Map<UUID, FastBoard> scoreboards = new ConcurrentHashMap<>();
     private static ScoreboardAdapter adapter = new DefaultScoreboardAdapter();
 
