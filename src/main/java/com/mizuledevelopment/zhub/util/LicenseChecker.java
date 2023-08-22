@@ -12,7 +12,7 @@ import java.net.http.HttpResponse;
 
 public class LicenseChecker {
 
-    private static final String LICENSE_STRING = "https://api.mizuledevelopment.com/license/validate";
+    private static final String LICENSE_STRING = "https://api.mizule.dev/license/validate";
     private static final URI LICENSE_URI = URI.create(LICENSE_STRING);
 
     private final zHub zhub;
