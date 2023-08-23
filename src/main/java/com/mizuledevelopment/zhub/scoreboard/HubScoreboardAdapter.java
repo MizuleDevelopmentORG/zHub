@@ -2,6 +2,7 @@ package com.mizuledevelopment.zhub.scoreboard;
 
 import com.mizuledevelopment.zhub.config.impl.ConfigFile;
 import com.mizuledevelopment.zhub.util.scoreboard.ScoreboardAdapter;
+import com.mizuledevelopment.zhub.util.text.MessageType;
 import com.mizuledevelopment.zhub.util.text.TextUtil;
 import com.mizuledevelopment.zhub.zHub;
 import net.kyori.adventure.text.Component;
@@ -26,6 +27,7 @@ public class HubScoreboardAdapter implements ScoreboardAdapter {
         final String title = this.config.getString("title", "<red>Title");
         return TextUtil.parse(
                 title,
+                MessageType.from(title),
                 player,
                 Placeholder.component("player", player.name())
         );
@@ -37,6 +39,7 @@ public class HubScoreboardAdapter implements ScoreboardAdapter {
         for (final String line : configLines) {
             lines.add(TextUtil.parse(
                     line,
+                    MessageType.from(line),
                     player,
                     Placeholder.component("player", player.name())
             ));

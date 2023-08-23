@@ -5,6 +5,9 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,33 +22,52 @@ public final class TextUtil {
     }
 
     public static Component parse(
-            final String input
+            final String input,
+            final MessageType messageType
     ) {
-        return parse(input, TagResolver.empty());
+        return parse(input, messageType, TagResolver.empty());
     }
 
     public static Component parse(
             final String input,
+            final MessageType messageType,
             final @NotNull TagResolver... resolvers
     ) {
-        return MiniMessage.miniMessage().deserialize(input, getResolvers(resolvers));
+        return switch (messageType) {
+            case MINIMESSAGE -> MiniMessage.miniMessage().deserialize(input, TagResolver.resolver(
+                    getResolvers(resolvers)
+            ));
+            case LEGACY -> LegacyComponentSerializer.legacyAmpersand().deserializeOr(input, Component.empty());
+            case LEGACY_SECTION -> LegacyComponentSerializer.legacySection().deserializeOr(input, Component.empty());
+            case GSON -> GsonComponentSerializer.gson().deserializeOr(input, Component.empty());
+            case PLAIN -> PlainTextComponentSerializer.plainText().deserializeOr(input, Component.empty());
+            default -> Component.text(input);
+        };
     }
 
     public static Component parse(
-            final String input, final Audience audience
+            final String input, final MessageType messageType, final Audience audience
     ) {
-        return parse(input, audience, getResolvers(TagResolver.empty()));
+        return parse(input, messageType, audience, getResolvers(TagResolver.empty()));
     }
 
     public static Component parse(
             final String input,
+            final MessageType messageType,
             final Audience audience,
             final @NotNull TagResolver... resolvers
     ) {
-        return MiniMessage.miniMessage().deserialize(input, TagResolver.resolver(
-                getResolvers(resolvers),
-                audienceResolver(audience)
-        ));
+        return switch (messageType) {
+            case MINIMESSAGE -> MiniMessage.miniMessage().deserialize(input, TagResolver.resolver(
+                    getResolvers(resolvers),
+                    audienceResolver(audience)
+            ));
+            case LEGACY -> LegacyComponentSerializer.legacyAmpersand().deserializeOr(input, Component.empty());
+            case LEGACY_SECTION -> LegacyComponentSerializer.legacySection().deserializeOr(input, Component.empty());
+            case GSON -> GsonComponentSerializer.gson().deserializeOr(input, Component.empty());
+            case PLAIN -> PlainTextComponentSerializer.plainText().deserializeOr(input, Component.empty());
+            default -> Component.text(input);
+        };
     }
 
     public static boolean isNullOrEmpty(final String text) {
