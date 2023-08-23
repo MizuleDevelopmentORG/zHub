@@ -33,7 +33,6 @@ public final class zHub extends JavaPlugin {
     private static zHub instance;
     private final Map<String, ConfigFile> configs = new HashMap<>();
     private Config tabConfig;
-    private Config settingsConfig;
     private Config configConfiguration;
     private Config messagesConfig;
     private PvPManager pvpManager;
@@ -69,9 +68,6 @@ public final class zHub extends JavaPlugin {
     }
 
     private void configuration() {
-        this.settingsConfig = new Config(this, new File(getDataFolder(), "settings.yml"), new YamlConfiguration(), "settings.yml");
-        this.settingsConfig.create();
-
         this.tabConfig = new Config(this, new File(getDataFolder(), "tab.yml"), new YamlConfiguration(), "tab.yml");
         this.tabConfig.create();
 
@@ -95,9 +91,6 @@ public final class zHub extends JavaPlugin {
         commandManager.addSubCommand(new SetSpawnCommand(this));
     }
 
-    public YamlConfiguration getSettings() {
-        return this.settingsConfig.getConfiguration();
-    }
 
     public YamlConfiguration getTab() {
         return this.tabConfig.getConfiguration();
@@ -105,10 +98,6 @@ public final class zHub extends JavaPlugin {
 
     public Config tabConfig() {
         return this.tabConfig;
-    }
-
-    public Config settingsConfig() {
-        return this.settingsConfig;
     }
 
     public TabHandler tabHandler() {
