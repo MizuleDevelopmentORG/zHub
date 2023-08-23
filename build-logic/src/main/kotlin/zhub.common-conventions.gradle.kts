@@ -139,15 +139,15 @@ tasks {
 
         val praps = mapOf(
             "pluginVersion" to project.versionString(),
-            "pluginAuthor" to providers.gradleProperty("projectAuthor").getOrElse("template"),
+            "pluginAuthor" to providers.gradleProperty("projectAuthor").getOrElse("a developer"),
             "pluginName" to providers.gradleProperty("projectName").getOrElse("template"),
+            "pluginWebsite" to providers.gradleProperty("projectWebsite").getOrElse("https://github.com"),
             "pluginDescription" to (project.description ?: "A template project")
         )
 
-        // TODO: enable again
-//        filesMatching(setOf("paper-plugin.yml", "plugin.yml", "velocity-plugin.json")) {
-//            expand(praps)
-//        }
+        filesMatching(setOf("paper-plugin.yml", "plugin.yml", "velocity-plugin.json")) {
+            expand(praps)
+        }
     }
 
     if (providers.gradleProperty("disableJavadoc").map { it.toBoolean() }.getOrElse(false)) {

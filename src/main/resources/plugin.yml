@@ -1,6 +1,10 @@
 name: zHub
-version: '${project.version}'
+version: "${pluginVersion}"
 main: com.mizuledevelopment.zhub.zHub
-api-version: '1.17'
+api-version: "1.18"
+website: "${pluginWebsite}"
+database: false
+author: "${pluginAuthor}"
+description: "${pluginDescription}"
 softdepend:
   - PlaceholderAPI

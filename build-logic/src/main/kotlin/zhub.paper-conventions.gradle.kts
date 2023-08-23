@@ -5,11 +5,12 @@ plugins {
 
 tasks {
     runServer {
-        minecraftVersion("1.20.1")
+        minecraftVersion(Constants.MINECRAFT_VERSION)
 
         jvmArguments.add("-Dcom.mojang.eula.agree=true")
         systemProperty("terminal.jline", false)
         systemProperty("terminal.ansi", true)
+        jvmArguments.add("-Dnet.kyori.ansi.colorLevel=truecolor")
 
     }
 

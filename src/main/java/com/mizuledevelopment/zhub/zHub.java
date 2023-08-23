@@ -13,6 +13,8 @@ import com.mizuledevelopment.zhub.util.LicenseChecker;
 import com.mizuledevelopment.zhub.util.color.Color;
 import com.mizuledevelopment.zhub.util.command.manager.CommandManager;
 import com.mizuledevelopment.zhub.util.config.Config;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
@@ -29,15 +31,17 @@ import java.util.Map;
 public final class zHub extends JavaPlugin {
 
     private static zHub instance;
+    private final Map<String, ConfigFile> configs = new HashMap<>();
     private Config tabConfig;
     private Config settingsConfig;
     private Config configConfiguration;
     private Config messagesConfig;
-    private final Map<String, ConfigFile> configs = new HashMap<>();
-
-
     private PvPManager pvpManager;
     private TabHandler tabHandler;
+
+    public static zHub instance() {
+        return instance;
+    }
 
     @Override
     public void onEnable() {
@@ -57,7 +61,11 @@ public final class zHub extends JavaPlugin {
         ScoreboardHandler.configure(new HubScoreboardAdapter(this));
         new ScoreboardHandler();
 
-        Bukkit.getConsoleSender().sendMessage(Color.translate("&8[&bzHub&8] &7Successfully enabled. It took me &b" + (System.currentTimeMillis() - time) + " &7ms"));
+        getComponentLogger().info(Component.text()
+                .append(Component.text("Successfully enabled. It took me ", NamedTextColor.GRAY))
+                .append(Component.text((System.currentTimeMillis() - time), NamedTextColor.AQUA))
+                .append(Component.text(" ms.", NamedTextColor.GRAY))
+                .build());
     }
 
     private void configuration() {
@@ -83,7 +91,7 @@ public final class zHub extends JavaPlugin {
     }
 
     private void command() {
-        CommandManager commandManager = new CommandManager(this.getCommand("zhub"));
+        final CommandManager commandManager = new CommandManager(this.getCommand("zhub"));
         commandManager.addSubCommand(new SetSpawnCommand(this));
     }
 
@@ -93,10 +101,6 @@ public final class zHub extends JavaPlugin {
 
     public YamlConfiguration getTab() {
         return this.tabConfig.getConfiguration();
-    }
-
-    public static zHub instance() {
-        return instance;
     }
 
     public Config tabConfig() {
@@ -112,15 +116,15 @@ public final class zHub extends JavaPlugin {
     }
 
     public YamlConfiguration getConfiguration() {
-        return configConfiguration.getConfiguration();
+        return this.configConfiguration.getConfiguration();
     }
 
     public Config getConfigConfiguration() {
-        return configConfiguration;
+        return this.configConfiguration;
     }
 
-    public YamlConfiguration getMessages(){
-        return messagesConfig.getConfiguration();
+    public YamlConfiguration getMessages() {
+        return this.messagesConfig.getConfiguration();
     }
 
     public ConfigFile config(final String name) {
