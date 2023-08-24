@@ -10,6 +10,7 @@ import com.mizuledevelopment.zhub.scoreboard.HubScoreboardAdapter;
 import com.mizuledevelopment.zhub.scoreboard.ScoreboardHandler;
 import com.mizuledevelopment.zhub.scoreboard.ScoreboardListener;
 import com.mizuledevelopment.zhub.tab.TabHandler;
+import com.mizuledevelopment.zhub.task.LocationTask;
 import com.mizuledevelopment.zhub.util.color.Color;
 import com.mizuledevelopment.zhub.util.command.manager.CommandManager;
 import org.bukkit.Bukkit;
@@ -54,6 +55,7 @@ public final class zHub extends JavaPlugin {
         this.hotbarHandler = new HotbarHandler(this);
         ScoreboardHandler.configure(new HubScoreboardAdapter(this));
         new ScoreboardHandler();
+        new LocationTask(this).runTaskTimerAsynchronously(this, 0, 20);
 
         Bukkit.getConsoleSender().sendMessage(Color.translate("&8[&bzHub&8] &7Successfully enabled. It took me &b" + (System.currentTimeMillis() - time) + " &7ms"));
     }

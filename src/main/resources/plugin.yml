@@ -3,11 +3,9 @@ version: "${pluginVersion}"
 main: com.mizuledevelopment.zhub.zHub
 api-version: "1.18"
 website: "${pluginWebsite}"
-database: false
 author: "${pluginAuthor}"
 description: "${pluginDescription}"
 softdepend:
   - PlaceholderAPI
 commands:
   zhub:
-    aliases: [hub]
