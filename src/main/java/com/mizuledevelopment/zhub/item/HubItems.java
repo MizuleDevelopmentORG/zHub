@@ -71,7 +71,7 @@ public class HubItems extends Hotbar {
     @Override
     public Map<Integer, ClickableItem> itemsToApply(final @NotNull Player player) {
         final Map<Integer, ClickableItem> items = new HashMap<>();
-        final boolean hasTag = player.getPersistentDataContainer().getOrDefault(NamespacedKey.fromString("lobby:hide"), PersistentDataType.BOOLEAN, Boolean.TRUE);
+        final boolean hasTag = player.getPersistentDataContainer().getOrDefault(NamespacedKey.fromString("lobby:hide"), PersistentDataType.BYTE, (byte) 1) == 1;
 
         if (this.config.getBoolean("compass")) items.put(4, getCachedItem("compass"));
         if (this.config.getBoolean("info")) items.put(0, getCachedItem("book"));
@@ -95,7 +95,7 @@ public class HubItems extends Hotbar {
                     // new ServerSelectorMenu().openMenu(player);
                 },
                 player -> PaperItemBuilder.ofType(Material.COMPASS)
-                        .name(disableItalics(text("sᴇʀᴠᴇʀ sᴇʟᴇᴄᴛᴏʀ", color(0x4d1214))))
+                        // .name(disableItalics(text("sᴇʀᴠᴇʀ sᴇʟᴇᴄᴛᴏʀ", color(0x4d1214))))
                         .build(),
                 false,
                 false,
@@ -103,9 +103,9 @@ public class HubItems extends Hotbar {
         ));
         addCachedItem("book", new ClickableItem(
                 player -> {
-                    for (final String line : Lobby.instance().getConfig().getStringList("server-info.message")) {
-                        player.sendRichMessage(line);
-                    }
+                    // for (final String line : Lobby.instance().getConfig().getStringList("server-info.message")) {
+                    //     player.sendRichMessage(line);
+                    // }
                 },
                 player -> BookBuilder.of(new ItemStack(Material.WRITTEN_BOOK))
                         .author(text("MineOrbit"))
@@ -123,16 +123,16 @@ public class HubItems extends Hotbar {
         addCachedItem("visibility:true", new ClickableItem(
                 player -> {
                     if (!canUseHide(player)) return;
-                    player.getPersistentDataContainer().set(NamespacedKey.fromString("lobby:hide"), PersistentDataType.BOOLEAN, Boolean.FALSE);
-                    player.sendRichMessage("<white>Player Visibility: <red>Disabled");
-                    VisibilityService.update(player);
+                    player.getPersistentDataContainer().set(NamespacedKey.fromString("lobby:hide"), PersistentDataType.BYTE, (byte) 0);
+                    // player.sendRichMessage("<white>Player Visibility: <red>Disabled");
+                    // VisibilityService.update(player);
                     HubItems.this.applyToPlayer(player, true);
                     HubItems.this.lastClick.put(player.getUniqueId(), System.currentTimeMillis());
                 },
                 player -> {
-                    final boolean hasTag = player.getPersistentDataContainer().getOrDefault(NamespacedKey.fromString("lobby:hide"), PersistentDataType.BOOLEAN, Boolean.FALSE);
+                    final boolean hasTag = (byte) player.getPersistentDataContainer().getOrDefault(NamespacedKey.fromString("lobby:hide"), PersistentDataType.BYTE, (byte) 0) == 1;
                     return PaperItemBuilder.ofType(Material.RED_DYE)
-                            .name(disableItalics(text("ʜɪᴅᴇ ᴘʟᴀʏᴇʀs", color(0xff3b41))))
+                            // .name(disableItalics(text("ʜɪᴅᴇ ᴘʟᴀʏᴇʀs", color(0xff3b41))))
                             .build();
                 },
                 false,
@@ -142,15 +142,15 @@ public class HubItems extends Hotbar {
         addCachedItem("visibility:false", new ClickableItem(
                 player -> {
                     if (!canUseHide(player)) return;
-                    player.getPersistentDataContainer().set(NamespacedKey.fromString("lobby:hide"), PersistentDataType.BOOLEAN, Boolean.TRUE);
-                    player.sendRichMessage("<white>Player Visibility: <green>Enabled");
-                    VisibilityService.update(player);
+                    player.getPersistentDataContainer().set(NamespacedKey.fromString("lobby:hide"), PersistentDataType.BYTE, (byte) 1);
+                    // player.sendRichMessage("<white>Player Visibility: <green>Enabled");
+                    // VisibilityService.update(player);
                     HubItems.this.applyToPlayer(player, true);
                     HubItems.this.lastClick.put(player.getUniqueId(), System.currentTimeMillis());
                 },
                 player -> {
                     return PaperItemBuilder.ofType(Material.LIME_DYE)
-                            .name(disableItalics(text("sʜᴏᴡ ᴘʟᴀʏᴇʀs", color(0xff3b41))))
+                            // .name(disableItalics(text("sʜᴏᴡ ᴘʟᴀʏᴇʀs", color(0xff3b41))))
                             .build();
                 },
                 false,
@@ -160,7 +160,7 @@ public class HubItems extends Hotbar {
         addCachedItem("pvp", new ClickableItem(
                 null,
                 player -> PaperItemBuilder.ofType(Material.DIAMOND_SWORD)
-                        .name(disableItalics(text("ᴘᴠᴘ sᴡᴏʀᴅ", color(0xff3b41))))
+                        // .name(disableItalics(text("ᴘᴠᴘ sᴡᴏʀᴅ", color(0xff3b41))))
                         .build(),
                 false,
                 false,
@@ -194,7 +194,7 @@ public class HubItems extends Hotbar {
         p.sendMessage(text()
                         .append(text("Please wait", RED))
                         .append(Component.space())
-                        .append(text(TimeUtil.formatHHMMSS((this.lastClick.get(p.getUniqueId()) + 5000 - System.currentTimeMillis()), true), RED))
+                        // .append(text(TimeUtil.formatHHMMSS((this.lastClick.get(p.getUniqueId()) + 5000 - System.currentTimeMillis()), true), RED))
                         .append(text(" to toggle player visibility!", RED))
         );
         return false;

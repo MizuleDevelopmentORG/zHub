@@ -78,9 +78,9 @@ public class PlayerListener implements Listener {
                                     (this.config.getString("inventory.selector.title"))));
                     final CommentedConfigurationNode node = this.config.section("inventory.selector.items");
                     for (final CommentedConfigurationNode child : node.childrenMap().values()) {
-                        final String name = child.node("name").getString("example");
-                        final int slot = (child.node("slot").getInt(1)) - 1;
-                        final boolean restricted = child.node("restricted").getBoolean();
+                        // final String name = child.node("name").getString("example");
+                        // final int slot = (child.node("slot").getInt(1)) - 1;
+                        // final boolean restricted = child.node("restricted").getBoolean();
                     }
 
                         event.getPlayer().openInventory(inventory);
