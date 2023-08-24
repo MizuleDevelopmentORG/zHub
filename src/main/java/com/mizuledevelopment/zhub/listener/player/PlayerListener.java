@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.persistence.PersistentDataType;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 
 import java.util.Objects;
 
@@ -75,8 +76,14 @@ public class PlayerListener implements Listener {
                             this.config.getInt("inventory.selector.size"),
                             TextUtil.parse(this.config.getString("inventory.selector.title"), MessageType.from
                                     (this.config.getString("inventory.selector.title"))));
-                    for (final String items : this.config.section("inventory.selector.items").key())
-                    event.getPlayer().openInventory(inventory);
+                    final CommentedConfigurationNode node = this.config.section("inventory.selector.items");
+                    for (final CommentedConfigurationNode child : node.childrenMap().values()) {
+                        final String name = child.node("name").getString("example");
+                        final int slot = (child.node("slot").getInt(1)) - 1;
+                        final boolean restricted = child.node("restricted").getBoolean();
+                    }
+
+                        event.getPlayer().openInventory(inventory);
                 } else if (name.equalsIgnoreCase("hub")) {
 
                 } else if (name.equalsIgnoreCase("pvp")) {

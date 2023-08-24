@@ -2,6 +2,7 @@ package com.mizuledevelopment.zhub;
 
 import com.mizuledevelopment.zhub.command.SetSpawnCommand;
 import com.mizuledevelopment.zhub.config.impl.ConfigFile;
+import com.mizuledevelopment.zhub.item.api.HotbarHandler;
 import com.mizuledevelopment.zhub.listener.player.PlayerListener;
 import com.mizuledevelopment.zhub.listener.server.ServerListener;
 import com.mizuledevelopment.zhub.pvp.PvPManager;
@@ -31,6 +32,7 @@ public final class zHub extends JavaPlugin {
     private PvPManager pvpManager;
     private TabHandler tabHandler;
     private final NamespacedKey namespacedKey = new NamespacedKey(this, "hub");
+    private HotbarHandler hotbarHandler;
 
     @Override
     public void onEnable() {
@@ -49,6 +51,7 @@ public final class zHub extends JavaPlugin {
         this.tabHandler = new TabHandler(this);
         this.listener(Bukkit.getPluginManager());
         this.pvpManager = new PvPManager();
+        this.hotbarHandler = new HotbarHandler(this);
         ScoreboardHandler.configure(new HubScoreboardAdapter(this));
         new ScoreboardHandler();
 
@@ -93,5 +96,9 @@ public final class zHub extends JavaPlugin {
 
     public PvPManager getPvpManager() {
         return pvpManager;
+    }
+
+    public HotbarHandler hotbarHandler() {
+        return this.hotbarHandler;
     }
 }
