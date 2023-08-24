@@ -1,4 +1,7 @@
+selector-item: true
+enderbut-item: true
+hub-item: true
+pvp-item: true
 weather: false
 damage: false
 pvp: false
-void: false

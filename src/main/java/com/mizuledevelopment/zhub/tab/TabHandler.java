@@ -1,7 +1,11 @@
 package com.mizuledevelopment.zhub.tab;
 
+import com.mizuledevelopment.zhub.config.impl.ConfigFile;
 import com.mizuledevelopment.zhub.tab.listener.TabListener;
+import com.mizuledevelopment.zhub.util.text.MessageType;
+import com.mizuledevelopment.zhub.util.text.TextUtil;
 import com.mizuledevelopment.zhub.zHub;
+import it.unimi.dsi.fastutil.io.TextIO;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 
@@ -10,31 +14,33 @@ import java.util.List;
 
 public class TabHandler {
 
-    private final zHub plugin;
-    private final List<String> header;
-    private final List<String> footer;
+    private final List<Component> header = new ArrayList<>();
+    private final List<Component> footer = new ArrayList<>();
 
     public TabHandler(final zHub plugin) {
-        this.plugin = plugin;
-        this.header = new ArrayList<>(this.plugin.getTab().getStringList("tab.header"));
-        this.footer = new ArrayList<>(this.plugin.getTab().getStringList("tab.footer"));
-        Bukkit.getPluginManager().registerEvents(new TabListener(this), this.plugin);
+        ConfigFile tab = plugin.config("tab");
+        tab.getStringList("tab.header").forEach(line -> {
+            header.add(TextUtil.parse(line, MessageType.from(line)));
+        });
+        tab.getStringList("tab.footer").forEach(line -> {
+            footer.add(TextUtil.parse(line, MessageType.from(line)));
+        });
+        Bukkit.getPluginManager().registerEvents(new TabListener(this), plugin);
     }
 
-    // TODO: I'll improve this later, I'm just lazy right now.
     public Component header() {
-        final StringBuilder s = new StringBuilder();
-        for (final String string : this.header) {
-            s.append(string);
+        final StringBuilder string = new StringBuilder();
+        for (Component component : header) {
+            string.append(component.toString());
         }
-        return Component.text(s.toString());
+        return Component.text(string.toString());
     }
 
     public Component footer() {
-        final StringBuilder s = new StringBuilder();
-        for (final String string : this.footer) {
-            s.append(string);
+        final StringBuilder string = new StringBuilder();
+        for (Component component : footer) {
+            string.append(component.toString());
         }
-        return Component.text(s.toString());
+        return Component.text(string.toString());
     }
 }

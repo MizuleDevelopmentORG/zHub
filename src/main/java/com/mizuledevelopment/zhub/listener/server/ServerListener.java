@@ -11,40 +11,38 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 
 public class ServerListener implements Listener {
 
-    private final zHub plugin;
     private final ConfigFile settings;
 
-    public ServerListener(final zHub plugin) {
-        this.plugin = plugin;
+    public ServerListener(zHub plugin) {
         this.settings = plugin.config("settings");
     }
 
     @EventHandler
-    public void onWeather(final WeatherChangeEvent event) {
-        if (!this.settings.getBoolean("weather", false)) {
+    public void onWeather(WeatherChangeEvent event) {
+        if (!this.settings.getBoolean("weather")) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onEntity(final EntityDamageEvent event) {
-        if (!this.settings.getBoolean("damage", false)) {
+    public void onEntity(EntityDamageEvent event) {
+        if (!this.settings.getBoolean("damage")) {
             event.setDamage(0);
             event.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onEntity(final EntityDamageByBlockEvent event) {
-        if (!this.settings.getBoolean("damage", false)) {
+    public void onEntity(EntityDamageByBlockEvent event) {
+        if (!this.settings.getBoolean("damage")) {
             event.setDamage(0);
             event.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onEntity(final EntityDamageByEntityEvent event) {
-        if (!this.settings.getBoolean("pvp", false)) {
+    public void onEntity(EntityDamageByEntityEvent event) {
+        if (!this.settings.getBoolean("pvp")) {
             event.setDamage(0);
             event.setCancelled(true);
         }

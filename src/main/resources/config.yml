@@ -1,1 +1,50 @@
 license: ""
+
+selector:
+  item: "COMPASS"
+  name: "<red>Selector"
+  enchantments:
+    - "DURABILITY:10"
+  lore:
+    - ""
+    - "<red>hey"
+    - ""
+  amount: 1
+  slot: 1
+hub:
+  item: "COMPASS"
+  name: "<red>Selector"
+  enchantments:
+    - "DURABILITY:10"
+  lore:
+    - ""
+    - "<red>hey"
+    - ""
+  amount: 1
+  slot: 2
+pvp:
+  item: "COMPASS"
+  name: "<red>Selector"
+  enchantments:
+    - "DURABILITY:10"
+  lore:
+    - ""
+    - "<red>hey"
+    - ""
+  amount: 1
+  slot: 3
+enderbutt:
+  item: "ENDER_PEARL"
+  name: "<red>Enderbutt"
+  enchantments:
+    - "DURABILITY:10"
+  lore:
+    - ""
+    - "<red>hey"
+    - ""
+  amount: 1
+  slot: 4
+test:
+  0:
+    item:
+    name:

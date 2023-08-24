@@ -1,0 +1,9 @@
+tab:
+  header:
+    - "<red>bye"
+    - ""
+    - ""
+  footer:
+    - ""
+    - ""
+    - "<red>hey"

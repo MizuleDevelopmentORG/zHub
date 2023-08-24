@@ -6,6 +6,7 @@ import com.mizuledevelopment.zhub.config.util.ConfigurateSerializers;
 import com.mizuledevelopment.zhub.config.util.ConfigurationSaveTask;
 import com.mizuledevelopment.zhub.util.FileUtil;
 import io.leangen.geantyref.TypeToken;
+import org.bukkit.Location;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.CommentedConfigurationNode;
