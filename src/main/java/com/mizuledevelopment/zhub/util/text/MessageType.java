@@ -29,11 +29,11 @@ public enum MessageType {
      * @return The {@link MessageType} enum
      */
     public static MessageType from(final String input) {
-        if (!input.isBlank() && input.charAt(0) == '{' && input.charAt(input.length() - 1) == '}')
+        if (input != null && !input.isBlank() && input.charAt(0) == '{' && input.charAt(input.length() - 1) == '}')
             return MessageType.GSON;
-        else if (!input.isBlank() && input.charAt(0) == '&')
+        else if (input != null && !input.isBlank() && input.charAt(0) == '&')
             return MessageType.LEGACY;
-        else if (!input.isBlank() && input.contains(LegacyComponentSerializer.SECTION_CHAR + ""))
+        else if (input != null && !input.isBlank() && input.contains(LegacyComponentSerializer.SECTION_CHAR + ""))
             return MessageType.LEGACY_SECTION;
         else
             return MessageType.MINIMESSAGE;

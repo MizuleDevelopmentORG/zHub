@@ -5,18 +5,23 @@ import com.mizuledevelopment.zhub.util.items.Items;
 import com.mizuledevelopment.zhub.util.text.MessageType;
 import com.mizuledevelopment.zhub.util.text.TextUtil;
 import com.mizuledevelopment.zhub.zHub;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class PlayerListener implements Listener {
@@ -65,6 +70,26 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        event.setJoinMessage(null);
+        if (this.settings.getBoolean("join-message")) {
+            for (String string : this.config.getStringList("join.message")) {
+                event.getPlayer().sendMessage(TextUtil.parse(string.replace("%player%", event.getPlayer().getName()), MessageType.from(string)));
+            }
+        }
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        event.setQuitMessage(null);
+        if (this.settings.getBoolean("quit-message")) {
+            for (String string : this.config.getStringList("quit.message")) {
+                event.getPlayer().sendMessage(TextUtil.parse(string.replace("%player%", event.getPlayer().getName()), MessageType.from(string)));
+            }
+        }
+    }
+
+    @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)
         || event.getAction().equals(Action.RIGHT_CLICK_AIR)) {
@@ -78,15 +103,54 @@ public class PlayerListener implements Listener {
                                     (this.config.getString("inventory.selector.title"))));
                     final CommentedConfigurationNode node = this.config.section("inventory.selector.items");
                     for (final CommentedConfigurationNode child : node.childrenMap().values()) {
-                        // final String name = child.node("name").getString("example");
-                        // final int slot = (child.node("slot").getInt(1)) - 1;
-                        // final boolean restricted = child.node("restricted").getBoolean();
+                        ItemStack itemStack = new ItemStack(Material.valueOf(child.node("item").getString()));
+                        itemStack.setAmount(child.node("amount").getInt());
+                        child.node("enchantments").childrenList().forEach(enchantment -> {
+                            itemStack.addUnsafeEnchantment(Objects.requireNonNull(Enchantment.getByName(Objects.requireNonNull(enchantment.getString()).split(":")[0])),
+                                Integer.parseInt(enchantment.getString().split(":")[1]));
+                        });
+                        ItemMeta meta = itemStack.getItemMeta();
+                        meta.displayName(TextUtil.parse(child.node("name").getString(), MessageType.from(Objects.requireNonNull(child.node("name").getString()))));
+                        ArrayList<Component> components = new ArrayList<>();
+                        child.node("lore").childrenList().forEach(line -> {
+                            components.add(TextUtil.parse(line.getString(), MessageType.from(Objects.requireNonNull(line.getString()))));
+                        });
+                        meta.lore(components);
+                        itemStack.setItemMeta(meta);
+                        inventory.setItem(child.node("slot").getInt(), itemStack);
+                    }
+                    event.getPlayer().openInventory(inventory);
+                } else if (name.equalsIgnoreCase("hub")) {
+                    Inventory inventory = Bukkit.createInventory(event.getPlayer(),
+                        this.config.getInt("inventory.hub.size"),
+                        TextUtil.parse(this.config.getString("inventory.hub.title"), MessageType.from
+                            (this.config.getString("inventory.hub.title"))));
+                    final CommentedConfigurationNode node = this.config.section("inventory.hub.items");
+                    for (final CommentedConfigurationNode child : node.childrenMap().values()) {
+                        ItemStack itemStack = new ItemStack(Material.valueOf(child.node("item").getString()));
+                        itemStack.setAmount(child.node("amount").getInt());
+                        child.node("enchantments").childrenList().forEach(enchantment -> {
+                            itemStack.addUnsafeEnchantment(Objects.requireNonNull(Enchantment.getByName(Objects.requireNonNull(enchantment.getString()).split(":")[0])),
+                                Integer.parseInt(enchantment.getString().split(":")[1]));
+                        });
+                        ItemMeta meta = itemStack.getItemMeta();
+                        meta.displayName(TextUtil.parse(child.node("name").getString(), MessageType.from(Objects.requireNonNull(child.node("name").getString()))));
+                        ArrayList<Component> components = new ArrayList<>();
+                        child.node("lore").childrenList().forEach(line -> {
+                            components.add(TextUtil.parse(line.getString(), MessageType.from(Objects.requireNonNull(line.getString()))));
+                        });
+                        meta.lore(components);
+                        itemStack.setItemMeta(meta);
+                        inventory.setItem(child.node("slot").getInt(), itemStack);
+                    }
+                    event.getPlayer().openInventory(inventory);
+                } else if (name.equalsIgnoreCase("pvp")) {
+                    if (this.plugin.getPvpManager().players.contains(event.getPlayer().getUniqueId())) {
+                        this.plugin.getPvpManager().players.remove(event.getPlayer().getUniqueId());
+                    } else {
+                        this.plugin.getPvpManager().players.add(event.getPlayer().getUniqueId());
                     }
 
-                        event.getPlayer().openInventory(inventory);
-                } else if (name.equalsIgnoreCase("hub")) {
-
-                } else if (name.equalsIgnoreCase("pvp")) {
 
                 }
             }

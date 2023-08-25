@@ -23,9 +23,12 @@ public final class TextUtil {
 
     public static Component parse(
             final String input,
-            final MessageType messageType
-    ) {
-        return parse(input, messageType, TagResolver.empty());
+            final MessageType messageType)
+    {
+        if (input != null) {
+            return parse(input, messageType, TagResolver.empty());
+        }
+        return null;
     }
 
     public static Component parse(
@@ -33,16 +36,19 @@ public final class TextUtil {
             final MessageType messageType,
             final @NotNull TagResolver... resolvers
     ) {
-        return switch (messageType) {
-            case MINIMESSAGE -> MiniMessage.miniMessage().deserialize(input, TagResolver.resolver(
+        if (input != null) {
+            return switch (messageType) {
+                case MINIMESSAGE -> MiniMessage.miniMessage().deserialize(input, TagResolver.resolver(
                     getResolvers(resolvers)
-            ));
-            case LEGACY -> LegacyComponentSerializer.legacyAmpersand().deserializeOr(input, Component.empty());
-            case LEGACY_SECTION -> LegacyComponentSerializer.legacySection().deserializeOr(input, Component.empty());
-            case GSON -> GsonComponentSerializer.gson().deserializeOr(input, Component.empty());
-            case PLAIN -> PlainTextComponentSerializer.plainText().deserializeOr(input, Component.empty());
-            default -> Component.text(input);
-        };
+                ));
+                case LEGACY -> LegacyComponentSerializer.legacyAmpersand().deserializeOr(input, Component.empty());
+                case LEGACY_SECTION -> LegacyComponentSerializer.legacySection().deserializeOr(input, Component.empty());
+                case GSON -> GsonComponentSerializer.gson().deserializeOr(input, Component.empty());
+                case PLAIN -> PlainTextComponentSerializer.plainText().deserializeOr(input, Component.empty());
+                default -> Component.text(input);
+            };
+        }
+        return null;
     }
 
     public static Component parse(

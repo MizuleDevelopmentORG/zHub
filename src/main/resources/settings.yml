@@ -1,7 +1,11 @@
 selector-item: true
-enderbut-item: true
+enderbutt-item: true
 hub-item: true
 pvp-item: true
 weather: false
 damage: false
 pvp: false
+join-message: true
+quit-message: false
+place: false
+break: false

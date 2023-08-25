@@ -42,10 +42,7 @@ import org.jetbrains.annotations.NotNull;
 import com.mizuledevelopment.zhub.item.api.ClickableItem;
 import com.mizuledevelopment.zhub.item.api.Hotbar;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static net.kyori.adventure.text.Component.*;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
@@ -71,7 +68,7 @@ public class HubItems extends Hotbar {
     @Override
     public Map<Integer, ClickableItem> itemsToApply(final @NotNull Player player) {
         final Map<Integer, ClickableItem> items = new HashMap<>();
-        final boolean hasTag = player.getPersistentDataContainer().getOrDefault(NamespacedKey.fromString("lobby:hide"), PersistentDataType.BYTE, (byte) 1) == 1;
+        final boolean hasTag = player.getPersistentDataContainer().getOrDefault(Objects.requireNonNull(NamespacedKey.fromString("lobby:hide")), PersistentDataType.BYTE, (byte) 1) == 1;
 
         if (this.config.getBoolean("compass")) items.put(4, getCachedItem("compass"));
         if (this.config.getBoolean("info")) items.put(0, getCachedItem("book"));

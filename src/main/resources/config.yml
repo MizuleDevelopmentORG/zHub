@@ -2,7 +2,7 @@ license: ""
 
 selector:
   item: "COMPASS"
-  name: "<red>Selector"
+  name: "<rainbow>Server Selector"
   enchantments:
     - "DURABILITY:10"
   lore:
@@ -12,8 +12,8 @@ selector:
   amount: 1
   slot: 1
 hub:
-  item: "COMPASS"
-  name: "<red>Selector"
+  item: "CLOCK"
+  name: "<rainbow>Hub Selector"
   enchantments:
     - "DURABILITY:10"
   lore:
@@ -23,8 +23,8 @@ hub:
   amount: 1
   slot: 2
 pvp:
-  item: "COMPASS"
-  name: "<red>Selector"
+  item: "DIAMOND_SWORD"
+  name: "<rainbow>PvP"
   enchantments:
     - "DURABILITY:10"
   lore:
@@ -35,7 +35,7 @@ pvp:
   slot: 3
 enderbutt:
   item: "ENDER_PEARL"
-  name: "<red>Enderbutt"
+  name: "<rainbow>EnderButt"
   enchantments:
     - "DURABILITY:10"
   lore:
@@ -44,7 +44,20 @@ enderbutt:
     - ""
   amount: 1
   slot: 4
-test:
-  0:
-    item:
-    name:
+inventory:
+  selector:
+    title: "<green>inventory"
+    size: 54
+    items:
+      1:
+        item: "DIAMOND"
+        enchantments:
+          - "DURABILITY:10"
+        name: "<red>SERVER"
+        lore:
+          - ""
+          - "<red>hey"
+          - ""
+        slot: 1
+        amount: 1
+        command: "queue join prison"
