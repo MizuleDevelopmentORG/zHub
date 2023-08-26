@@ -86,6 +86,7 @@ public class ServerListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
+        // cry
         if (event.getView().title().equals(TextUtil.parse(this.config.getString("inventory.selector.title"), MessageType.from(this.config.getString("inventory.selector.title"))))
         || event.getView().title().equals(TextUtil.parse(this.config.getString("inventory.hub.title"), MessageType.from(this.config.getString("inventory.hub.title"))))) {
             event.setCancelled(true);

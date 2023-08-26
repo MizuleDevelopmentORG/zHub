@@ -37,7 +37,6 @@ public final class zHub extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        YamlConfiguration configuration = new YamlConfiguration();
         instance = this;
         final long time = System.currentTimeMillis();
         saveDefaultConfig();

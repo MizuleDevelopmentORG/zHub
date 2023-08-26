@@ -7,6 +7,7 @@ import com.mizuledevelopment.zhub.util.text.TextUtil;
 import com.mizuledevelopment.zhub.zHub;
 import it.unimi.dsi.fastutil.io.TextIO;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.JoinConfiguration;
 import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
@@ -18,29 +19,23 @@ public class TabHandler {
     private final List<Component> footer = new ArrayList<>();
 
     public TabHandler(final zHub plugin) {
-        ConfigFile tab = plugin.config("tab");
+        final ConfigFile tab = plugin.config("tab");
         tab.getStringList("tab.header").forEach(line -> {
-            header.add(TextUtil.parse(line, MessageType.from(line)));
+            this.header.add(TextUtil.parse(line, MessageType.from(line)));
         });
         tab.getStringList("tab.footer").forEach(line -> {
-            footer.add(TextUtil.parse(line, MessageType.from(line)));
+            this.footer.add(TextUtil.parse(line, MessageType.from(line)));
         });
         Bukkit.getPluginManager().registerEvents(new TabListener(this), plugin);
     }
 
     public Component header() {
-        final StringBuilder string = new StringBuilder();
-        for (Component component : header) {
-            string.append(component.toString());
-        }
-        return Component.text(string.toString());
+        final List<Component> components = new ArrayList<>(this.header);
+        return Component.join(JoinConfiguration.newlines(), components);
     }
 
     public Component footer() {
-        final StringBuilder string = new StringBuilder();
-        for (Component component : footer) {
-            string.append(component.toString());
-        }
-        return Component.text(string.toString());
+        final List<Component> components = new ArrayList<>(this.header);
+        return Component.join(JoinConfiguration.newlines(), components);
     }
 }

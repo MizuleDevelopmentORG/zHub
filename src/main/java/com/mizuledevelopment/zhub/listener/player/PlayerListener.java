@@ -6,10 +6,12 @@ import com.mizuledevelopment.zhub.util.text.MessageType;
 import com.mizuledevelopment.zhub.util.text.TextUtil;
 import com.mizuledevelopment.zhub.zHub;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -22,6 +24,7 @@ import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class PlayerListener implements Listener {
@@ -30,14 +33,14 @@ public class PlayerListener implements Listener {
     private final ConfigFile settings;
     private final ConfigFile config;
 
-    public PlayerListener(zHub plugin) {
+    public PlayerListener(final zHub plugin) {
         this.plugin = plugin;
         this.config = plugin.config("config");
         this.settings = plugin.config("settings");
     }
 
     @EventHandler
-    public void onJoin(PlayerSpawnLocationEvent event) {
+    public void onJoin(final PlayerSpawnLocationEvent event) {
         /*
         if (this.config.get("spawn") != null) {
             final Location location = (Location) this.config.get("spawn");
@@ -61,7 +64,7 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onVoid(PlayerMoveEvent event) {
+    public void onVoid(final PlayerMoveEvent event) {
         if (!this.settings.getBoolean("void")) {
             if (event.getPlayer().getLocation().getBlockY() <= this.config.getInt("void")) {
                 event.getPlayer().teleportAsync((Location) Objects.requireNonNull(this.config.get("spawn")));
@@ -70,48 +73,61 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
-        event.setJoinMessage(null);
+    public void onJoin(final PlayerJoinEvent event) {
+        final Player player = event.getPlayer();
+        event.joinMessage(null);
         if (this.settings.getBoolean("join-message")) {
-            for (String string : this.config.getStringList("join.message")) {
-                event.getPlayer().sendMessage(TextUtil.parse(string.replace("%player%", event.getPlayer().getName()), MessageType.from(string)));
+            for (final String string : this.config.getStringList("join.message")) {
+                player.sendMessage(TextUtil.parse(
+                    string,
+                    MessageType.from(string),
+                    player,
+                    Placeholder.component("player", player.name())
+                ));
             }
         }
     }
 
     @EventHandler
-    public void onQuit(PlayerQuitEvent event) {
-        event.setQuitMessage(null);
+    public void onQuit(final PlayerQuitEvent event) {
+        final Player player = event.getPlayer();
+        event.quitMessage(null);
         if (this.settings.getBoolean("quit-message")) {
-            for (String string : this.config.getStringList("quit.message")) {
-                event.getPlayer().sendMessage(TextUtil.parse(string.replace("%player%", event.getPlayer().getName()), MessageType.from(string)));
+            for (final String string : this.config.getStringList("quit.message")) {
+                player.sendMessage(TextUtil.parse(
+                    string,
+                    MessageType.from(string),
+                    player,
+                    Placeholder.component("player", player.name())
+                ));
             }
         }
     }
 
     @EventHandler
-    public void onInteract(PlayerInteractEvent event) {
-        if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)
-        || event.getAction().equals(Action.RIGHT_CLICK_AIR)) {
-            String name = event.getPlayer().getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer()
-                    .get(this.plugin.getNamespacedKey(), PersistentDataType.STRING);
+    public void onInteract(final PlayerInteractEvent event) {
+        // BIG cry
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK
+            || event.getAction() == Action.RIGHT_CLICK_AIR) {
+            final String name = event.getPlayer().getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer()
+                .get(this.plugin.getNamespacedKey(), PersistentDataType.STRING);
             if (name != null) {
                 if (name.equalsIgnoreCase("selector")) {
-                    Inventory inventory = Bukkit.createInventory(event.getPlayer(),
-                            this.config.getInt("inventory.selector.size"),
-                            TextUtil.parse(this.config.getString("inventory.selector.title"), MessageType.from
-                                    (this.config.getString("inventory.selector.title"))));
+                    final Inventory inventory = Bukkit.createInventory(event.getPlayer(),
+                        this.config.getInt("inventory.selector.size"),
+                        TextUtil.parse(this.config.getString("inventory.selector.title"), MessageType.from
+                            (this.config.getString("inventory.selector.title"))));
                     final CommentedConfigurationNode node = this.config.section("inventory.selector.items");
                     for (final CommentedConfigurationNode child : node.childrenMap().values()) {
-                        ItemStack itemStack = new ItemStack(Material.valueOf(child.node("item").getString()));
+                        final ItemStack itemStack = new ItemStack(Material.valueOf(child.node("item").getString()));
                         itemStack.setAmount(child.node("amount").getInt());
                         child.node("enchantments").childrenList().forEach(enchantment -> {
                             itemStack.addUnsafeEnchantment(Objects.requireNonNull(Enchantment.getByName(Objects.requireNonNull(enchantment.getString()).split(":")[0])),
                                 Integer.parseInt(enchantment.getString().split(":")[1]));
                         });
-                        ItemMeta meta = itemStack.getItemMeta();
+                        final ItemMeta meta = itemStack.getItemMeta();
                         meta.displayName(TextUtil.parse(child.node("name").getString(), MessageType.from(Objects.requireNonNull(child.node("name").getString()))));
-                        ArrayList<Component> components = new ArrayList<>();
+                        final ArrayList<Component> components = new ArrayList<>();
                         child.node("lore").childrenList().forEach(line -> {
                             components.add(TextUtil.parse(line.getString(), MessageType.from(Objects.requireNonNull(line.getString()))));
                         });
@@ -121,21 +137,21 @@ public class PlayerListener implements Listener {
                     }
                     event.getPlayer().openInventory(inventory);
                 } else if (name.equalsIgnoreCase("hub")) {
-                    Inventory inventory = Bukkit.createInventory(event.getPlayer(),
+                    final Inventory inventory = Bukkit.createInventory(event.getPlayer(),
                         this.config.getInt("inventory.hub.size"),
                         TextUtil.parse(this.config.getString("inventory.hub.title"), MessageType.from
                             (this.config.getString("inventory.hub.title"))));
                     final CommentedConfigurationNode node = this.config.section("inventory.hub.items");
                     for (final CommentedConfigurationNode child : node.childrenMap().values()) {
-                        ItemStack itemStack = new ItemStack(Material.valueOf(child.node("item").getString()));
+                        final ItemStack itemStack = new ItemStack(Material.valueOf(child.node("item").getString()));
                         itemStack.setAmount(child.node("amount").getInt());
                         child.node("enchantments").childrenList().forEach(enchantment -> {
                             itemStack.addUnsafeEnchantment(Objects.requireNonNull(Enchantment.getByName(Objects.requireNonNull(enchantment.getString()).split(":")[0])),
                                 Integer.parseInt(enchantment.getString().split(":")[1]));
                         });
-                        ItemMeta meta = itemStack.getItemMeta();
+                        final ItemMeta meta = itemStack.getItemMeta();
                         meta.displayName(TextUtil.parse(child.node("name").getString(), MessageType.from(Objects.requireNonNull(child.node("name").getString()))));
-                        ArrayList<Component> components = new ArrayList<>();
+                        final ArrayList<Component> components = new ArrayList<>();
                         child.node("lore").childrenList().forEach(line -> {
                             components.add(TextUtil.parse(line.getString(), MessageType.from(Objects.requireNonNull(line.getString()))));
                         });
@@ -150,8 +166,6 @@ public class PlayerListener implements Listener {
                     } else {
                         this.plugin.getPvpManager().players.add(event.getPlayer().getUniqueId());
                     }
-
-
                 }
             }
         }

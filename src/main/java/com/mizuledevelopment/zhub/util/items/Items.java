@@ -12,6 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Items {
@@ -26,7 +27,7 @@ public class Items {
         ItemMeta meta = itemStack.getItemMeta();
         meta.getPersistentDataContainer().set(plugin.getNamespacedKey(), PersistentDataType.STRING, "selector");
         meta.displayName(TextUtil.parse(config.getString("selector.name"), MessageType.from(config.getString("selector.name"))));
-        ArrayList<Component> components = new ArrayList<>();
+        List<Component> components = new ArrayList<>();
         config.getStringList("selector.lore").forEach(line -> components.add(TextUtil.parse(line, MessageType.from(line))));
         meta.lore(components);
         itemStack.setItemMeta(meta);
@@ -42,7 +43,7 @@ public class Items {
                         Integer.parseInt(enchantment.split(":")[1])));
         ItemMeta meta = itemStack.getItemMeta();
         meta.displayName(TextUtil.parse(config.getString("enderbutt.name"), MessageType.from(config.getString("enderbutt.name"))));
-        ArrayList<Component> components = new ArrayList<>();
+        List<Component> components = new ArrayList<>();
         config.getStringList("enderbutt.lore").forEach(line -> components.add(TextUtil.parse(line, MessageType.from(line))));
         meta.lore(components);
         itemStack.setItemMeta(meta);
@@ -58,7 +59,7 @@ public class Items {
                         Integer.parseInt(enchantment.split(":")[1])));
         ItemMeta meta = itemStack.getItemMeta();
         meta.displayName(TextUtil.parse(config.getString("pvp.name"), MessageType.from(config.getString("pvp.name"))));
-        ArrayList<Component> components = new ArrayList<>();
+        List<Component> components = new ArrayList<>();
         config.getStringList("pvp.lore").forEach(line -> components.add(TextUtil.parse(line, MessageType.from(line))));
         meta.lore(components);
         itemStack.setItemMeta(meta);
@@ -74,7 +75,7 @@ public class Items {
                         Integer.parseInt(enchantment.split(":")[1])));
         ItemMeta meta = itemStack.getItemMeta();
         meta.displayName(TextUtil.parse(config.getString("hub.name"), MessageType.from(config.getString("hub.name"))));
-        ArrayList<Component> components = new ArrayList<>();
+        List<Component> components = new ArrayList<>();
         config.getStringList("hub.lore").forEach(line -> components.add(TextUtil.parse(line, MessageType.from(line))));
         meta.lore(components);
         itemStack.setItemMeta(meta);

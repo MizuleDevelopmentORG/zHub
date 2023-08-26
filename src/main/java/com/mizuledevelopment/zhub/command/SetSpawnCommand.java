@@ -4,8 +4,10 @@ import com.mizuledevelopment.zhub.config.impl.ConfigFile;
 import com.mizuledevelopment.zhub.util.color.Color;
 import com.mizuledevelopment.zhub.util.command.Command;
 import com.mizuledevelopment.zhub.zHub;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.spongepowered.configurate.serialize.SerializationException;
 
 public class SetSpawnCommand extends Command {
 
@@ -24,7 +26,11 @@ public class SetSpawnCommand extends Command {
             sender.sendMessage(Color.translate(this.messages.getString("messages.no-permissions")));
         }
 
-        this.config.set("spawn", "set");
+        try {
+            this.config.handle().node("spawn").set(Location.class, player.getLocation());
+        } catch (SerializationException e) {
+            throw new RuntimeException(e);
+        }
         this.config.save();
         player.sendMessage(Color.translate(this.messages.getString("messages.setspawn")));
     }
