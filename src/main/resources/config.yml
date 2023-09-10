@@ -1,5 +1,23 @@
 license: ""
 
+spawn:
+  location:
+    world: world
+    x: -24
+    y: 60
+    z: -10
+    yaw: -179.90935
+    pitch: 0.6258706
+    worldId: 422980e3-a277-4133-957a-e2000eea67be
+    min:
+      x: -350
+      y: 15
+      z: -350
+    max:
+      x: 350
+      y: 256
+      z: 350
+
 selector:
   item: "COMPASS"
   name: "<rainbow>Server Selector"
