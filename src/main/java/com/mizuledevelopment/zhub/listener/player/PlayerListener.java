@@ -2,6 +2,8 @@ package com.mizuledevelopment.zhub.listener.player;
 
 import com.mizuledevelopment.zhub.config.impl.ConfigFile;
 import com.mizuledevelopment.zhub.util.items.Items;
+import com.mizuledevelopment.zhub.util.location.LazyLocation;
+import com.mizuledevelopment.zhub.util.location.LocationUtil;
 import com.mizuledevelopment.zhub.util.text.MessageType;
 import com.mizuledevelopment.zhub.util.text.TextUtil;
 import com.mizuledevelopment.zhub.zHub;
@@ -15,7 +17,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -24,7 +28,6 @@ import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class PlayerListener implements Listener {
@@ -40,36 +43,15 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onJoin(final PlayerSpawnLocationEvent event) {
-        /*
-        if (this.config.get("spawn") != null) {
-            final Location location = (Location) this.config.get("spawn");
-            if (location != null) {
-                event.setSpawnLocation(location);
-            }
-        }
-        */
-        if (this.settings.getBoolean("selector-item")) {
-            event.getPlayer().getInventory().setItem(this.config.getInt("selector.slot"), Items.SELECTOR(this.plugin));
-        }
-        if (this.settings.getBoolean("enderbutt-item")) {
-            event.getPlayer().getInventory().setItem(this.config.getInt("enderbutt.slot"), Items.ENDERBUTT(this.plugin));
-        }
-        if (this.settings.getBoolean("pvp-item")) {
-            event.getPlayer().getInventory().setItem(this.config.getInt("pvp.slot"), Items.PVP(this.plugin));
-        }
-        if (this.settings.getBoolean("hub-item")) {
-            event.getPlayer().getInventory().setItem(this.config.getInt("hub.slot"), Items.HUB(this.plugin));
-        }
-    }
+    public void onInitialSpawn(final PlayerSpawnLocationEvent event) {
+        final LazyLocation lazyLocation = LocationUtil.parse(this.config.section("spawn.location"));
+        final Location location = lazyLocation.location();
 
-    @EventHandler
-    public void onVoid(final PlayerMoveEvent event) {
-        if (!this.settings.getBoolean("void")) {
-            if (event.getPlayer().getLocation().getBlockY() <= this.config.getInt("void")) {
-                event.getPlayer().teleportAsync((Location) Objects.requireNonNull(this.config.get("spawn")));
-            }
+        if (location == null) {
+            this.plugin.getSLF4JLogger().error("Could not find spawn location.");
+            return;
         }
+        event.setSpawnLocation(location);
     }
 
     @EventHandler
@@ -85,6 +67,19 @@ public class PlayerListener implements Listener {
                     Placeholder.component("player", player.name())
                 ));
             }
+        }
+
+        if (this.settings.getBoolean("selector-item")) {
+            event.getPlayer().getInventory().setItem(this.config.getInt("selector.slot"), Items.SELECTOR(this.plugin));
+        }
+        if (this.settings.getBoolean("enderbutt-item")) {
+            event.getPlayer().getInventory().setItem(this.config.getInt("enderbutt.slot"), Items.ENDERBUTT(this.plugin));
+        }
+        if (this.settings.getBoolean("pvp-item")) {
+            event.getPlayer().getInventory().setItem(this.config.getInt("pvp.slot"), Items.PVP(this.plugin));
+        }
+        if (this.settings.getBoolean("hub-item")) {
+            event.getPlayer().getInventory().setItem(this.config.getInt("hub.slot"), Items.HUB(this.plugin));
         }
     }
 

@@ -36,7 +36,7 @@ jobs:
           chmod +x gradlew
 
       - name: "validate gradle wrapper"
-        uses: "gradle/wrapper-validation-action@v1"
+        uses: "gradle/wrapper-validation-action@v1.1.0"
 
       - name: "Setup JDK ${{ matrix.java }}"
         uses: actions/setup-java@v3
