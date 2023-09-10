@@ -62,7 +62,7 @@ jobs:
             ${{ runner.os }}-deltapvp-
 
       - name: "run gradle build"
-        uses: "gradle/gradle-build-action@2.8.0"
+        uses: "gradle/gradle-build-action@v2.8.0"
         with:
           cache-read-only: "${{ !startsWith(github.ref, 'refs/heads/master/') || github.event_name == 'pull_request' }}"
           arguments: "build --stacktrace"
