@@ -209,7 +209,8 @@ public class ConfigFile implements IConfig<CommentedConfigurationNode, Commented
 
     @Override
     public CommentedConfigurationNode section(final String path) {
-        return this.resolvePath(path).virtual() ? null : this.resolvePath(path);
+        final CommentedConfigurationNode node = this.resolvePath(path);
+        return node.virtual() ? setInternal(path, null) : node;
     }
 
     @Override
@@ -308,5 +309,14 @@ public class ConfigFile implements IConfig<CommentedConfigurationNode, Commented
             return null;
         }
         return node;
+    }
+
+    public CommentedConfigurationNode setInternal(final String path, final String value) {
+        final CommentedConfigurationNode node = this.resolvePath(path);
+        try {
+            return node.set(value);
+        } catch (SerializationException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

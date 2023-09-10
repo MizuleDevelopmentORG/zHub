@@ -70,6 +70,7 @@ public final class zHub extends JavaPlugin {
     private void command() {
         CommandManager commandManager = new CommandManager(this.getCommand("zhub"));
         commandManager.addSubCommand(new SetSpawnCommand(this));
+        commandManager.registerCommands();
     }
 
     public static zHub instance() {

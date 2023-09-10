@@ -1,5 +1,6 @@
 package com.mizuledevelopment.zhub.task;
 
+import com.mizuledevelopment.zhub.util.PlayerUtil;
 import com.mizuledevelopment.zhub.util.cuboid.Cuboid;
 import com.mizuledevelopment.zhub.util.location.LazyLocation;
 import com.mizuledevelopment.zhub.util.location.LocationUtil;
@@ -70,16 +71,15 @@ public class LocationTask extends BukkitRunnable {
         Bukkit.getScheduler().runTask(this.lobby, task -> {
             player.setFallDistance(0);
             if (this.bukkitLocation == null) {
-                player.teleportAsync(spawnWorld.getSpawnLocation());
+                player.teleportAsync(LocationUtil.center(spawnWorld.getSpawnLocation()));
                 task.cancel();
                 return;
             }
-            player.teleportAsync(this.bukkitLocation).thenAccept(result -> {
+            player.teleportAsync(LocationUtil.center(this.bukkitLocation)).thenAccept(result -> {
                 if (result) {
-                    // TODO: minimessage
-                    player.sendMessage("<green>Successfully teleported to spawn.");
+                    PlayerUtil.sendMessage(player, "<green>Successfully teleported to spawn.");
                 } else {
-                    player.sendMessage("<red>Failed to teleport to spawn.");
+                    PlayerUtil.sendMessage(player, "<red>Failed to teleport to spawn.");
                 }
             });
         });

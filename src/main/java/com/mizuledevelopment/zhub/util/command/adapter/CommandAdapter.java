@@ -4,11 +4,13 @@ package com.mizuledevelopment.zhub.util.command.adapter;
 import com.mizuledevelopment.zhub.util.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class CommandAdapter implements CommandExecutor {
+public class CommandAdapter implements TabExecutor {
 
     private final List<Command> commands;
 
@@ -38,5 +40,20 @@ public class CommandAdapter implements CommandExecutor {
         }
 
         return true;
+    }
+
+    @Override
+    public @Nullable List<String> onTabComplete(
+        @NotNull
+        final CommandSender sender, final org.bukkit.command.@NotNull Command command,
+        @NotNull
+        final String label,
+        final @NotNull String[] args
+    ) {
+        if (args.length == 0) {
+            return this.commands.stream().map(Command::getName).toList();
+        }
+
+        return List.of();
     }
 }
