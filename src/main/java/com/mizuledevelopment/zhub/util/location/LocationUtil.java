@@ -35,7 +35,7 @@ public final class LocationUtil {
         return new ChunkCoordinates(x >> 4, z >> 4);
     }
 
-    public static @NotNull Location getCenter(
+    public static @NotNull Location center(
         @NotNull
         final Location location
     ) {

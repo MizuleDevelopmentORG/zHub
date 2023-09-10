@@ -25,7 +25,9 @@ public class CommandManager {
     }
 
     public void registerCommands() {
-        this.pluginCommand.setExecutor(new CommandAdapter(this.commands));
+        final CommandAdapter adapter = new CommandAdapter(this.commands);
+        this.pluginCommand.setExecutor(adapter);
+        this.pluginCommand.setTabCompleter(adapter);
     }
 
     public List<Command> getRegisteredSubCommands() {
