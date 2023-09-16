@@ -2,10 +2,10 @@ package com.mizuledevelopment.zhub.util;
 
 import com.mizuledevelopment.zhub.zHub;
 import org.bukkit.NamespacedKey;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class Keys {
 
@@ -14,7 +14,7 @@ public class Keys {
     private Keys() {
     }
 
-    public static NamespacedKey getKey(final String key) {
+    public static NamespacedKey getKey(final @NotNull String key) {
         return KEYS.computeIfAbsent(key, k -> new NamespacedKey(zHub.instance(), k));
     }
 }
