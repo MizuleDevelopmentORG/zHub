@@ -7,5 +7,3 @@ author: "${pluginAuthor}"
 description: "${pluginDescription}"
 softdepend:
   - PlaceholderAPI
-commands:
-  zhub:

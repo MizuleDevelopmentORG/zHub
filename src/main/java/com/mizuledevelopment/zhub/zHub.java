@@ -1,6 +1,11 @@
 package com.mizuledevelopment.zhub;
 
+import cloud.commandframework.exceptions.CommandExecutionException;
+import cloud.commandframework.exceptions.InvalidSyntaxException;
+import cloud.commandframework.minecraft.extras.MinecraftHelp;
+import cloud.commandframework.paper.PaperCommandManager;
 import com.mizuledevelopment.zhub.command.SetSpawnCommand;
+import com.mizuledevelopment.zhub.command.zHubCommand;
 import com.mizuledevelopment.zhub.config.impl.ConfigFile;
 import com.mizuledevelopment.zhub.item.api.HotbarHandler;
 import com.mizuledevelopment.zhub.listener.player.PlayerListener;
@@ -13,18 +18,45 @@ import com.mizuledevelopment.zhub.tab.TabHandler;
 import com.mizuledevelopment.zhub.task.LocationTask;
 import com.mizuledevelopment.zhub.util.color.Color;
 import com.mizuledevelopment.zhub.util.command.manager.CommandManager;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import cloud.commandframework.CommandTree;
+import cloud.commandframework.brigadier.CloudBrigadierManager;
+import cloud.commandframework.bukkit.CloudBukkitCapabilities;
+import cloud.commandframework.exceptions.ArgumentParseException;
+import cloud.commandframework.exceptions.CommandExecutionException;
+import cloud.commandframework.exceptions.InvalidSyntaxException;
+import cloud.commandframework.exceptions.NoPermissionException;
+import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
+import cloud.commandframework.execution.CommandExecutionCoordinator;
+import cloud.commandframework.execution.FilteringCommandSuggestionProcessor;
+import cloud.commandframework.meta.CommandMeta;
+import cloud.commandframework.minecraft.extras.AudienceProvider;
+import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
+import cloud.commandframework.minecraft.extras.MinecraftHelp;
+import cloud.commandframework.paper.PaperCommandManager;
+import cloud.commandframework.services.types.ConsumerService;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.util.ComponentMessageThrowable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+
+import static net.kyori.adventure.text.Component.*;
+import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 public final class zHub extends JavaPlugin {
 
@@ -32,8 +64,11 @@ public final class zHub extends JavaPlugin {
     private final Map<String, ConfigFile> configs = new HashMap<>();
     private PvPManager pvpManager;
     private TabHandler tabHandler;
+
     private final NamespacedKey namespacedKey = new NamespacedKey(this, "hub");
     private HotbarHandler hotbarHandler;
+    private PaperCommandManager<CommandSender> commandManager;
+    private MinecraftHelp<CommandSender> minecraftHelp;
 
     @Override
     public void onEnable() {
@@ -47,7 +82,7 @@ public final class zHub extends JavaPlugin {
 //            getServer().getPluginManager().disablePlugin(this);
 //            return;
 //        }
-        this.command();
+//         this.command();
         this.tabHandler = new TabHandler(this);
         this.listener(Bukkit.getPluginManager());
         this.pvpManager = new PvPManager();
@@ -55,6 +90,7 @@ public final class zHub extends JavaPlugin {
         ScoreboardHandler.configure(new HubScoreboardAdapter(this));
         new ScoreboardHandler();
         new LocationTask(this).runTaskTimerAsynchronously(this, 0, 20);
+        setupCloud();
 
         Bukkit.getConsoleSender().sendMessage(Color.translate("&8[&bzHub&8] &7Successfully enabled. It took me &b" + (System.currentTimeMillis() - time) + " &7ms"));
     }
@@ -102,5 +138,89 @@ public final class zHub extends JavaPlugin {
 
     public HotbarHandler hotbarHandler() {
         return this.hotbarHandler;
+    }
+
+    private void setupCloud() {
+        final Function<CommandTree<CommandSender>, CommandExecutionCoordinator<CommandSender>> executionCoordinatorFunction =
+            AsynchronousCommandExecutionCoordinator.<CommandSender>builder().withAsynchronousParsing().build();
+        final Function<CommandSender, CommandSender> mapperFunction = Function.identity();
+        try {
+            this.commandManager = new PaperCommandManager<>(
+                this,
+                executionCoordinatorFunction,
+                mapperFunction,
+                mapperFunction
+            );
+        } catch (final Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        this.commandManager.commandSuggestionProcessor(new FilteringCommandSuggestionProcessor<>(
+            FilteringCommandSuggestionProcessor.Filter.<CommandSender>contains(true).andTrimBeforeLastSpace()));
+
+        if (this.commandManager.hasCapability(CloudBukkitCapabilities.NATIVE_BRIGADIER) || this.commandManager.hasCapability(CloudBukkitCapabilities.COMMODORE_BRIGADIER)) {
+            this.commandManager.registerBrigadier();
+            final CloudBrigadierManager<CommandSender, ?> cloudMgr = Objects.requireNonNull(this.commandManager.brigadierManager());
+            cloudMgr.setNativeNumberSuggestions(false);
+        }
+        if (this.commandManager.hasCapability(CloudBukkitCapabilities.ASYNCHRONOUS_COMPLETION)) {
+            this.commandManager.registerAsynchronousCompletions();
+        }
+        this.commandManager.registerCommandPostProcessor(context -> {
+            final boolean implemented = context.getCommand().getCommandMeta().getOrDefault(CommandMeta.Key.of(Boolean.class, "implemented"), true);
+            if (!implemented) {
+                context.getCommandContext().getSender().sendMessage(text("This command is not implemented yet.", RED));
+                ConsumerService.interrupt();
+            }
+        });
+
+        this.minecraftHelp = new MinecraftHelp<>("malibu", AudienceProvider.nativeAudience(), this.commandManager);
+        new MinecraftExceptionHandler<CommandSender>().withInvalidSyntaxHandler()
+            .withInvalidSenderHandler().withArgumentParsingHandler()
+            .withCommandExecutionHandler()
+            .withDecorator(component -> Component.empty().append(text("[zHub]", TextColor.color(0xFF3FC8), TextDecoration.BOLD))
+                .append(Component.space()).append(component))
+            .apply(this.commandManager, AudienceProvider.nativeAudience());
+
+        this.commandManager.registerExceptionHandler(NoPermissionException.class,
+            (source, exception) -> {
+                source.sendMessage(text("You do not have permission to execute this command.", RED));
+            });
+        this.commandManager.registerExceptionHandler(ArgumentParseException.class,
+            (source, exception) -> {
+                source.sendMessage(Objects.requireNonNull(ComponentMessageThrowable.getOrConvertMessage(exception.getCause())).colorIfAbsent(RED));
+            });
+        this.commandManager.registerExceptionHandler(CommandExecutionException.class,
+            (source, exception) -> {
+                if (exception.getCause() instanceof UnsupportedOperationException) {
+                    source.sendMessage(text("This command is not supported by the server.", RED));
+                }
+            });
+        this.commandManager.registerExceptionHandler(UnsupportedOperationException.class,
+            (source, exception) -> {
+                source.sendMessage(text(exception.getMessage(), RED));
+            });
+        this.commandManager.registerExceptionHandler(InvalidSyntaxException.class,
+            (source, exception) -> {
+                final String[] syntax = exception.getCorrectSyntax().split(" ");
+                source.sendMessage(text()
+                    .append(text("Usage: ", RED))
+                    .append(text("/" + syntax[0], RED))
+                    .append(Component.space())
+                    .append(text(String.join(" ", Arrays.copyOfRange(syntax, 1, syntax.length)), WHITE))
+                );
+            });
+
+        List.of(
+            new zHubCommand()
+        ).forEach(command -> command.register(this.commandManager));
+    }
+
+    public PaperCommandManager<CommandSender> commandManager() {
+        return this.commandManager;
+    }
+
+    public MinecraftHelp<CommandSender> minecraftHelp() {
+        return this.minecraftHelp;
     }
 }
