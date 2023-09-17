@@ -1,9 +1,22 @@
 package com.mizuledevelopment.zhub;
 
+import cloud.commandframework.CommandTree;
+import cloud.commandframework.brigadier.CloudBrigadierManager;
+import cloud.commandframework.bukkit.CloudBukkitCapabilities;
+import cloud.commandframework.exceptions.ArgumentParseException;
 import cloud.commandframework.exceptions.CommandExecutionException;
+import cloud.commandframework.exceptions.InvalidCommandSenderException;
 import cloud.commandframework.exceptions.InvalidSyntaxException;
+import cloud.commandframework.exceptions.NoPermissionException;
+import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
+import cloud.commandframework.execution.CommandExecutionCoordinator;
+import cloud.commandframework.execution.FilteringCommandSuggestionProcessor;
+import cloud.commandframework.meta.CommandMeta;
+import cloud.commandframework.minecraft.extras.AudienceProvider;
+import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
 import cloud.commandframework.minecraft.extras.MinecraftHelp;
 import cloud.commandframework.paper.PaperCommandManager;
+import cloud.commandframework.services.types.ConsumerService;
 import com.mizuledevelopment.zhub.command.SetSpawnCommand;
 import com.mizuledevelopment.zhub.command.SpawnCommand;
 import com.mizuledevelopment.zhub.command.zHubCommand;
@@ -18,35 +31,18 @@ import com.mizuledevelopment.zhub.scoreboard.ScoreboardListener;
 import com.mizuledevelopment.zhub.tab.TabHandler;
 import com.mizuledevelopment.zhub.task.LocationTask;
 import com.mizuledevelopment.zhub.util.color.Color;
-import com.mizuledevelopment.zhub.util.command.manager.CommandManager;
-import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-import cloud.commandframework.CommandTree;
-import cloud.commandframework.brigadier.CloudBrigadierManager;
-import cloud.commandframework.bukkit.CloudBukkitCapabilities;
-import cloud.commandframework.exceptions.ArgumentParseException;
-import cloud.commandframework.exceptions.CommandExecutionException;
-import cloud.commandframework.exceptions.InvalidSyntaxException;
-import cloud.commandframework.exceptions.NoPermissionException;
-import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
-import cloud.commandframework.execution.CommandExecutionCoordinator;
-import cloud.commandframework.execution.FilteringCommandSuggestionProcessor;
-import cloud.commandframework.meta.CommandMeta;
-import cloud.commandframework.minecraft.extras.AudienceProvider;
-import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
-import cloud.commandframework.minecraft.extras.MinecraftHelp;
-import cloud.commandframework.paper.PaperCommandManager;
-import cloud.commandframework.services.types.ConsumerService;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.util.ComponentMessageThrowable;
+import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,13 +59,16 @@ public final class zHub extends JavaPlugin {
 
     private static zHub instance;
     private final Map<String, ConfigFile> configs = new HashMap<>();
+    private final NamespacedKey namespacedKey = new NamespacedKey(this, "hub");
     private PvPManager pvpManager;
     private TabHandler tabHandler;
-
-    private final NamespacedKey namespacedKey = new NamespacedKey(this, "hub");
     private HotbarHandler hotbarHandler;
     private PaperCommandManager<CommandSender> commandManager;
     private MinecraftHelp<CommandSender> minecraftHelp;
+
+    public static zHub instance() {
+        return instance;
+    }
 
     @Override
     public void onEnable() {
@@ -98,14 +97,10 @@ public final class zHub extends JavaPlugin {
 
     private void listener(final @NotNull PluginManager pluginManager) {
         Arrays.asList(
-                new ServerListener(this),
-                new PlayerListener(this),
-                new ScoreboardListener()
+            new ServerListener(this),
+            new PlayerListener(this),
+            new ScoreboardListener()
         ).forEach(listener -> pluginManager.registerEvents(listener, this));
-    }
-
-    public static zHub instance() {
-        return instance;
     }
 
     public TabHandler tabHandler() {
@@ -169,11 +164,11 @@ public final class zHub extends JavaPlugin {
             }
         });
 
-        this.minecraftHelp = new MinecraftHelp<>("malibu", AudienceProvider.nativeAudience(), this.commandManager);
+        this.minecraftHelp = new MinecraftHelp<>("zhub", AudienceProvider.nativeAudience(), this.commandManager);
         new MinecraftExceptionHandler<CommandSender>().withInvalidSyntaxHandler()
             .withInvalidSenderHandler().withArgumentParsingHandler()
             .withCommandExecutionHandler()
-            .withDecorator(component -> Component.empty().append(text("[zHub]", TextColor.color(0xFF3FC8), TextDecoration.BOLD))
+            .withDecorator(component -> Component.empty().append(text("[zHub]", TextColor.color(0x2F83FF), TextDecoration.BOLD))
                 .append(Component.space()).append(component))
             .apply(this.commandManager, AudienceProvider.nativeAudience());
 
@@ -194,6 +189,25 @@ public final class zHub extends JavaPlugin {
         this.commandManager.registerExceptionHandler(UnsupportedOperationException.class,
             (source, exception) -> {
                 source.sendMessage(text(exception.getMessage(), RED));
+            });
+        this.commandManager.registerExceptionHandler(InvalidCommandSenderException.class,
+            (source, exc) -> {
+                final Class<?> requiredSender = exc.getRequiredSender();
+                if (ConsoleCommandSender.class.isAssignableFrom(requiredSender)) {
+                    source.sendMessage(text()
+                        .append(text("This command can only be executed by Console.", RED))
+                    );
+                } else if (Player.class.isAssignableFrom(requiredSender)) {
+                    source.sendMessage(text()
+                        .append(text("This command can only be executed by players.", RED))
+                    );
+                } else {
+                    source.sendMessage(text()
+                        .append(text("This command can only be executed by ", RED))
+                        .append(text(requiredSender.getSimpleName(), WHITE))
+                        .append(text("s.", RED))
+                    );
+                }
             });
         this.commandManager.registerExceptionHandler(InvalidSyntaxException.class,
             (source, exception) -> {
