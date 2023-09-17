@@ -9,6 +9,7 @@ dependencies {
     implementation(libs.indra.spotless)
     implementation(libs.shadow)
     implementation(libs.run.task)
+    implementation("gradle.plugin.org.jetbrains.gradle.plugin.idea-ext:gradle-idea-ext:1.1.7")
 }
 
 java {

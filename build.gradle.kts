@@ -12,6 +12,7 @@ dependencies {
     compileOnly("broccolai.corn:corn-minecraft-paper:3.2.2") {
         exclude("io.papermc.paper", "paper-api")
     }
+    compileOnly(libs.bundles.cloud)
 }
 
 applyJarMetadata("com.mizuledevelopment.zhub")

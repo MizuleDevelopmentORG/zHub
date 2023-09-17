@@ -3,6 +3,7 @@ plugins {
     id("idea")
     id("eclipse")
     id("visual-studio")
+    id("org.jetbrains.gradle.plugin.idea-ext")
 }
 
 val libs = extensions.getByType(org.gradle.accessors.dm.LibrariesForLibs::class)
