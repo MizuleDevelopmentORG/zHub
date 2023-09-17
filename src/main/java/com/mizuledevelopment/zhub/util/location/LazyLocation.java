@@ -69,6 +69,10 @@ public class LazyLocation {
         return this.pitch;
     }
 
+    public boolean isPresent() {
+        return this.world != null && !this.world.isEmpty() && this.worldName != null && !this.worldName.isBlank() && this.x != 0 && this.y != 0 && this.z != 0;
+    }
+
     public @Nullable Location location() {
         if (this.world == null || this.world.isEmpty()) {
             return null;

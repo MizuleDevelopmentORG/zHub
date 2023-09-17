@@ -5,6 +5,7 @@ import cloud.commandframework.exceptions.InvalidSyntaxException;
 import cloud.commandframework.minecraft.extras.MinecraftHelp;
 import cloud.commandframework.paper.PaperCommandManager;
 import com.mizuledevelopment.zhub.command.SetSpawnCommand;
+import com.mizuledevelopment.zhub.command.SpawnCommand;
 import com.mizuledevelopment.zhub.command.zHubCommand;
 import com.mizuledevelopment.zhub.config.impl.ConfigFile;
 import com.mizuledevelopment.zhub.item.api.HotbarHandler;
@@ -101,12 +102,6 @@ public final class zHub extends JavaPlugin {
                 new PlayerListener(this),
                 new ScoreboardListener()
         ).forEach(listener -> pluginManager.registerEvents(listener, this));
-    }
-
-    private void command() {
-        CommandManager commandManager = new CommandManager(this.getCommand("zhub"));
-        commandManager.addSubCommand(new SetSpawnCommand(this));
-        commandManager.registerCommands();
     }
 
     public static zHub instance() {
@@ -212,7 +207,9 @@ public final class zHub extends JavaPlugin {
             });
 
         List.of(
-            new zHubCommand()
+            new zHubCommand(),
+            new SetSpawnCommand(this),
+            new SpawnCommand(this)
         ).forEach(command -> command.register(this.commandManager));
     }
 
