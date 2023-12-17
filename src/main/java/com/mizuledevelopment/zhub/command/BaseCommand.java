@@ -17,11 +17,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mizuledevelopment.zhub.pvp.listener;
+package com.mizuledevelopment.zhub.command;
 
-import org.bukkit.event.Listener;
+import cloud.commandframework.CommandManager;
+import org.bukkit.command.CommandSender;
 
-public class PvPListener implements Listener {
+/**
+ * A command, registered with Cloud's {@link CommandManager} and operates on a {@link org.bukkit.command.CommandSender}
+ * sender.
+ */
+public abstract class BaseCommand {
 
-
+    /**
+     * Register this command with the {@link CommandManager}.
+     *
+     * @param commandManager The manager to register commands with. This assumes the manager
+     *                       supports {@link CommandSender}s as a sender.
+     */
+    public abstract void register(final CommandManager<CommandSender> commandManager);
 }

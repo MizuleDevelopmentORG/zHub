@@ -43,14 +43,16 @@ spotless {
         removeUnusedImports()
         formatAnnotations()
         applyCommon()
-        target("*/src/*/java/**/*.java")
-        target("*/src/*/templates/**/*.java")
+        // target("**/src/*/java/**/*.java")
+        // target("**/src/*/java-templates/**/*.java")
     }
     kotlinGradle {
         applyCommon()
     }
     kotlin {
         applyCommon()
+        target("**/src/*/kotlin/**/*.kt")
+        target("**/src/*/kotlin-templates/**/*.kt")
     }
     json {
         applyCommon()

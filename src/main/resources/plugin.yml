@@ -7,5 +7,17 @@ author: "${pluginAuthor}"
 description: "${pluginDescription}"
 softdepend:
   - PlaceholderAPI
-commands:
-  zhub:
+  - MiniPlaceholders
+permissions:
+  zhub.command.reload:
+    description: Reloads the plugin
+    default: op
+  zhub.command.help:
+    description: Shows the help menu
+    default: op
+  zhub.command.setspawn:
+    description: Sets the spawn
+    default: op
+  zhub.command.spawn:
+    description: Teleports to the spawn
+    default: true
