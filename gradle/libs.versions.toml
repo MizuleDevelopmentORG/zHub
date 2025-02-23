@@ -1,6 +1,6 @@
 [versions]
 annotations = "24.0.1"
-miniplaceholders = "2.2.1"
+miniplaceholders = "2.3.0"
 paper = "1.18.2-R0.1-SNAPSHOT"
 bstats = "3.0.2"
 kotlin = "1.9.10"
