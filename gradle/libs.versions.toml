@@ -5,7 +5,7 @@ paper = "1.18.2-R0.1-SNAPSHOT"
 bstats = "3.0.2"
 kotlin = "1.9.10"
 
-configurate = "4.2.0-SNAPSHOT"
+configurate = "4.2.0"
 placeholderapi = "2.11.3"
 
 # build-logic stuff
